@@ -1,0 +1,162 @@
+.big-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  padding: 0.5rem;
+
+  .superiror {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 1rem;
+    color: var(--good-blue);
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  .btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 2rem;
+
+    p {
+      color: var(--gray-blue);
+      font-size: 0.9rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: #fff;
+      background-color: var(--good-blue);
+      width: 10rem;
+      height: 2.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0.3rem;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--gray-blue);
+      }
+
+      &.up {
+        background-color: transparent;
+        color: var(--good-blue);
+        border: 1px solid var(--good-blue);
+
+        &:hover {
+          background-color: var(--gray-blue);
+        }
+      }
+    }
+  }
+}
+
+.auth-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .auth-form {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    gap: 1rem;
+    position: relative;
+
+    .superior {
+      font-size: 0.9rem;
+      color: var(--good-blue);
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: var(--good-blue);
+      margin-block: 1.6rem;
+    }
+
+    input {
+      width: 20rem;
+      height: 2rem;
+      font-size: 1rem;
+      padding-left: 0.5rem;
+      border: 1px solid var(--gray-blue);
+      border-radius: 0.3rem;
+      outline: none;
+
+      &::placeholder {
+        color: var(--good-blue);
+        opacity: 0.6;
+      }
+
+      &:focus {
+        border: 2px solid var(--good-blue);
+      }
+    }
+
+    button {
+      width: 20rem;
+      height: 2rem;
+      font-size: 1rem;
+      background: var(--good-blue);
+      color: #fff;
+      border: none;
+      border-radius: 0.3rem;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--dark-blue);
+      }
+    }
+
+    .out-account {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .big-container {
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .btns {
+      flex-direction: column;
+      margin-top: 2rem;
+      gap: 0.5rem;
+
+      a {
+        width: 15rem;
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .big-container {
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
