@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import axios from "axios";
 import Sign from "./views/auth/Sign";
 import Signup from "./views/auth/Signup";
 import Signin from "./views/auth/Signin";
 import Verify from "./views/auth/Verify";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
 
 function App() {
   const [status, setStatus] = useState(false);

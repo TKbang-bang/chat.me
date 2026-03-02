@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./.css";
 import { toast } from "sonner";
+import { signup } from "../../services/auth.service";
 
 function Signup() {
   const [firstname, setFirstname] = useState("");
@@ -25,13 +26,18 @@ function Signup() {
     if (password !== confirmPassword)
       return toast.error("Passwords do not match");
 
-    console.log({
-      firstname,
-      lastname,
-      username,
-      email,
-      password,
-    });
+    try {
+      const response = await signup({
+        firstname,
+        lastname,
+        username,
+        email,
+        password,
+      });
+      if (!response.success) return toast.error(response.message);
+    } catch (error) {
+      return toast.error(error.response.data.message || error.message);
+    }
   };
 
   return (
