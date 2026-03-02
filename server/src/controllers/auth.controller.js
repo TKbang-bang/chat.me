@@ -4,11 +4,13 @@ export const signupController = async (req, res, next) => {
   try {
     const { firstname, lastname, username, email, password } = req.body;
 
-    await signingUp({ firstname, lastname, username, email, password });
+    await signingUp(firstname, lastname, username, email, password);
 
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
-      message: "User created successfully",
+      data: {
+        message: "User signed up successfully",
+      },
     });
   } catch (error) {
     return next(error);

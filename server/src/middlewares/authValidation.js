@@ -79,6 +79,14 @@ const passwordValidation = (password) => {
       message: "Password must be between 6 and 20 characters",
     };
 
+  const letters = /[A-Za-z]/g;
+  const numbers = /[0-9]/g;
+  if (!password.match(letters) || !password.match(numbers))
+    return {
+      success: false,
+      message: "Password must contain at least one letter and one number",
+    };
+
   return { success: true };
 };
 

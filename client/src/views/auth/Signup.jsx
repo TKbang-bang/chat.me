@@ -35,6 +35,11 @@ function Signup() {
         password,
       });
       if (!response.success) return toast.error(response.message);
+
+      return (
+        toast.success(response.message),
+        (window.location.href = "/verify")
+      );
     } catch (error) {
       return toast.error(error.response.data.message || error.message);
     }
