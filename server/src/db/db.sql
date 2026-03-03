@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS pending_users  (
     username VARCHAR(100) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    verify_code TEXT NOT NULL,
+    verification_code TEXT NOT NULL,
+    verification_token TEXT NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '5 minutes'
 );

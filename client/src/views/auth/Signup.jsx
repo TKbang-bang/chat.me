@@ -41,7 +41,7 @@ function Signup() {
         (window.location.href = "/verify")
       );
     } catch (error) {
-      return toast.error(error.response.data.message || error.message);
+      return toast.error(error.response.data.error.message || error.message);
     }
   };
 

@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import axios from "axios";
+import { getAccessToken, setAccessToken } from "./token.service";
 
 export const signup = async (data) => {
   try {
@@ -13,6 +14,63 @@ export const signup = async (data) => {
     );
 
     return { success: true, message: response.data.message };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};
+
+export const resendCode = async () => {
+  try {
+    const response = await axios.put("/auth/resend");
+    if (response.status != 201)
+      return { success: false, message: response.data.error.message };
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};
+
+export const codeVerify = async (code) => {
+  try {
+    const response = await axios.post("/auth/verify", { code });
+    if (response.status != 200)
+      return { success: false, message: response.data.error.message };
+
+    // seting the access token
+    setAccessToken(response.data.data.accessToken);
+
+    // removing the code from the local storage
+    localStorage.removeItem("codeExpiresAt");
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};
+
+export const isUserLogged = async () => {
+  try {
+    const res = await axios.get("/auth/islogged", {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+    if (res.status != 201)
+      return { success: false, message: res.data.error.message };
+
+    setAccessToken(res.headers["access-token"].split(" ")[1]);
+
+    return { success: true };
   } catch (error) {
     return {
       success: false,

@@ -125,7 +125,20 @@
       transition: all 0.2s ease-in-out;
 
       &:hover {
-        background-color: var(--dark-blue);
+        opacity: 0.8;
+      }
+    }
+
+    .refresh {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--dark-blue);
+
+      & svg {
+        width: 1.2rem;
+        fill: #fff;
       }
     }
 
