@@ -1,6 +1,15 @@
 import React, { useEffect } from "react";
 import { getAccessToken } from "../../services/token.service";
 import { isUserLogged } from "../../services/auth.service";
+import "./.css";
+import {
+  CloseIcon,
+  MenuIcon,
+  SearchIcon,
+  UserIcon,
+  UserRequestIcon,
+} from "../../svg/svgs";
+import Header from "./components/Header";
 
 function Home() {
   const handleUserLogged = async () => {
@@ -13,10 +22,11 @@ function Home() {
   };
 
   return (
-    <div>
+    <main className="home-main">
+      <Header />
       <h1>Home</h1>
       <button onClick={handleUserLogged}>access token</button>
-    </div>
+    </main>
   );
 }
 
