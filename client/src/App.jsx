@@ -25,7 +25,8 @@ function App() {
           window.location.href = "/sign";
       }
 
-      console.log("You are logged in");
+      return;
+      // console.log("You are logged in");
     } catch (error) {
       if (
         window.location.pathname !== "/signin" &&

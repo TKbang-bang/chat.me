@@ -1,4 +1,3 @@
-import js from "@eslint/js";
 import axios from "axios";
 import { getAccessToken, setAccessToken } from "./token.service";
 
@@ -60,15 +59,33 @@ export const codeVerify = async (code) => {
 
 export const isUserLogged = async () => {
   try {
-    const res = await axios.get("/auth/islogged", {
+    const response = await axios.get("/auth/islogged", {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     });
-    if (res.status != 201)
-      return { success: false, message: res.data.error.message };
+    if (response.status != 201)
+      return { success: false, message: response.data.error.message };
 
-    setAccessToken(res.headers["access-token"].split(" ")[1]);
+    setAccessToken(response.headers["access-token"].split(" ")[1]);
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};
+
+export const signin = async (email, password) => {
+  try {
+    const response = await axios.post("/auth/signin", { email, password });
+    if (response.status != 200)
+      return { success: false, message: response.data.error.message };
+
+    // seting the access token
+    setAccessToken(response.data.data.accessToken);
 
     return { success: true };
   } catch (error) {

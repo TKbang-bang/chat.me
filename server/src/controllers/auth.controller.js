@@ -1,6 +1,7 @@
 import {
   getUserAuthenticated,
   resendingCode,
+  signingIn,
   signingUp,
   verifyingCode,
 } from "../services/auth.service.js";
@@ -82,4 +83,19 @@ export const isAuthenticated = async (req, res, next) => {
   }
 };
 
-export const signinController = async (req, res, next) => {};
+export const signinController = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await signingIn(email, password);
+
+    // creating tokens
+    const accessToken = createAccessToken(user.id);
+    const refreshToken = createRefreshToken(user.id);
+
+    // sending tokens to client in cookies
+    sendingCookieToken(res, accessToken, refreshToken);
+  } catch (error) {
+    return next(error);
+  }
+};

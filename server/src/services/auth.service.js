@@ -147,3 +147,20 @@ export const getUserAuthenticated = async (id) => {
 
   return;
 };
+
+export const signingIn = async (email, password) => {
+  // verefying if the email is in db
+  const userByEmail = await getUserByEmail(email);
+  if (!userByEmail)
+    throw new ServerError("Email did not match any user", "email", 404);
+
+  // verefying if the password is correct
+  const isPasswordCorrect = await bcrypt.compare(
+    password,
+    userByEmail.password,
+  );
+  if (!isPasswordCorrect)
+    throw new ServerError("Incorrect password", "password", 400);
+
+  return userByEmail;
+};

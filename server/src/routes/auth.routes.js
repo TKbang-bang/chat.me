@@ -15,7 +15,6 @@ authRoutes.post("/signup", authValidation, signupController);
 authRoutes.put("/resend", codeRefreshController);
 authRoutes.post("/verify", verifyController);
 authRoutes.get("/islogged", sessionMiddleware, isAuthenticated);
-
 authRoutes.post("/signin", signinController);
 
 export default authRoutes;
