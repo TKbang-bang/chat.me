@@ -18,7 +18,9 @@ function Home() {
       if (!res.success) console.log(res.message);
 
       console.log({ accessToken: getAccessToken() });
-    } catch (error) {}
+    } catch (error) {
+      // console.log(error);
+    }
   };
 
   return (

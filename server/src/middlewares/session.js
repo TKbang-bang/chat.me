@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
 import { cookieOptions } from "../utils/cookies.js";
+import ServerError from "../error/ServerError.js";
 
 const sessionMiddleware = async (req, res, next) => {
   const accessToken = req.headers.authorization?.split(" ")[1];
   const refreshToken = req.cookies.refreshToken;
 
-  // token verification
-  if (!accessToken && !refreshToken)
-    return res.status(401).json({ message: "Unauthorized" });
+  if ((!accessToken || accessToken == "null") && !refreshToken)
+    throw new ServerError("Unauthorized", "session", 401);
 
   // if both tokens are present, verify access token first
   if (accessToken && accessToken != "null") {
@@ -48,7 +48,7 @@ const sessionMiddleware = async (req, res, next) => {
       return next();
     } catch (error) {
       console.log("Invalid refresh token", error);
-      return res.status(401).json({ message: "Invalid refresh token" });
+      throw new ServerError("Unauthorized", "session", 401);
     }
   }
 };

@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   codeRefreshController,
   isAuthenticated,
+  logoutController,
   signinController,
   signupController,
   verifyController,
@@ -16,5 +17,6 @@ authRoutes.put("/resend", codeRefreshController);
 authRoutes.post("/verify", verifyController);
 authRoutes.get("/islogged", sessionMiddleware, isAuthenticated);
 authRoutes.post("/signin", signinController);
+authRoutes.delete("/logout", sessionMiddleware, logoutController);
 
 export default authRoutes;

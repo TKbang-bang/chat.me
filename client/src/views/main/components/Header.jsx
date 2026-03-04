@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
+import { toast } from "sonner";
 import {
   CloseIcon,
   LogoutIcon,
@@ -8,8 +9,20 @@ import {
   UserIcon,
   UserRequestIcon,
 } from "../../../svg/svgs";
+import { logout } from "../../../services/auth.service";
 
 function Header() {
+  const handleLogout = async () => {
+    try {
+      const res = await logout();
+      if (!res.success) return toast.error(res.message);
+
+      return (window.location.href = "/sign");
+    } catch (error) {
+      return toast.error(error.response.data.error.message || error.message);
+    }
+  };
+
   return (
     <header>
       <Link to="/" className="logo">
@@ -29,7 +42,7 @@ function Header() {
           <div className="mini-menu">
             <ul className="options">
               <li>
-                <NavLink to={"/"}>
+                <NavLink to={"/account"}>
                   <UserIcon />
                   <p>Account</p>
                 </NavLink>
@@ -48,7 +61,7 @@ function Header() {
               </li>
             </ul>
 
-            <button className="logout">
+            <button className="logout" onClick={handleLogout}>
               <LogoutIcon />
               Log out
             </button>

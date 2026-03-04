@@ -1,5 +1,9 @@
 import axios from "axios";
-import { getAccessToken, setAccessToken } from "./token.service";
+import {
+  getAccessToken,
+  removeAccessToken,
+  setAccessToken,
+} from "./token.service";
 
 export const signup = async (data) => {
   try {
@@ -67,7 +71,8 @@ export const isUserLogged = async () => {
     if (response.status != 201)
       return { success: false, message: response.data.error.message };
 
-    setAccessToken(response.headers["access-token"].split(" ")[1]);
+    if (response.headers["access-token"])
+      setAccessToken(response.headers["access-token"].split(" ")[1]);
 
     return { success: true };
   } catch (error) {
@@ -86,6 +91,29 @@ export const signin = async (email, password) => {
 
     // seting the access token
     setAccessToken(response.data.data.accessToken);
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response = await axios.delete("/auth/logout", {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+    if (response.status != 201)
+      return { success: false, message: response.data.error.message };
+
+    // removing the access token
+    setAccessToken(null);
+    removeAccessToken();
 
     return { success: true };
   } catch (error) {

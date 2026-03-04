@@ -5,7 +5,7 @@ import {
   signingUp,
   verifyingCode,
 } from "../services/auth.service.js";
-import { sendingCookieToken } from "../utils/cookies.js";
+import { cookieOptions, sendingCookieToken } from "../utils/cookies.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
 
 export const signupController = async (req, res, next) => {
@@ -95,6 +95,17 @@ export const signinController = async (req, res, next) => {
 
     // sending tokens to client in cookies
     sendingCookieToken(res, accessToken, refreshToken);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const logoutController = async (req, res, next) => {
+  try {
+    req.userId = null;
+    res.clearCookie("refreshToken", cookieOptions);
+
+    return res.status(201).end();
   } catch (error) {
     return next(error);
   }
