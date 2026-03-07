@@ -23,7 +23,7 @@ const sessionMiddleware = async (req, res, next) => {
 
       return next();
     } catch (error) {
-      console.log("Invalid access token", error);
+      // console.log("Invalid access token", error);
     }
   }
 
@@ -47,7 +47,7 @@ const sessionMiddleware = async (req, res, next) => {
 
       return next();
     } catch (error) {
-      console.log("Invalid refresh token", error);
+      console.log("Invalid tokens", error);
       throw new ServerError("Unauthorized", "session", 401);
     }
   }

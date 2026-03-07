@@ -10,6 +10,7 @@ import {
   UserRequestIcon,
 } from "../../../svg/svgs";
 import { logout } from "../../../services/auth.service";
+import "./.css";
 
 function Header() {
   const handleLogout = async () => {
@@ -23,21 +24,41 @@ function Header() {
     }
   };
 
+  const handleMenuContainerClick = (e) => {
+    if (e.target.classList.contains("menu-container")) {
+      document.querySelector(".menu-container").classList.remove("active");
+    }
+  };
+
   return (
     <header>
       <Link to="/" className="logo">
         <h1>Chat.me</h1>
       </Link>
 
-      <button className="responsive-item">
+      <button
+        className="responsive-item menu-icon"
+        onClick={() =>
+          document.querySelector(".menu-container").classList.toggle("active")
+        }
+      >
         <MenuIcon />
       </button>
 
-      <div className="menu-container">
+      <div className="menu-container active" onClick={handleMenuContainerClick}>
         <div className="menu">
-          <button className="responsive-item">
-            <CloseIcon />
-          </button>
+          <div className="close-icon-container">
+            <button
+              className="responsive-item close-icon"
+              onClick={() =>
+                document
+                  .querySelector(".menu-container")
+                  .classList.toggle("active")
+              }
+            >
+              <CloseIcon />
+            </button>
+          </div>
 
           <div className="mini-menu">
             <ul className="options">
