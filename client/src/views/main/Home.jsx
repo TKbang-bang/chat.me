@@ -1,34 +1,28 @@
-import React, { useEffect } from "react";
-import { getAccessToken } from "../../services/token.service";
-import { isUserLogged } from "../../services/auth.service";
-import "./.css";
-import {
-  CloseIcon,
-  MenuIcon,
-  SearchIcon,
-  UserIcon,
-  UserRequestIcon,
-} from "../../svg/svgs";
+import React from "react";
 import Header from "./components/Header";
+import { Routes, Route } from "react-router-dom";
+import Account from "./Account";
+import Requests from "./Requests";
+import Search from "./Search";
+import io from "socket.io-client";
+import { IoContextProvider } from "../../contexts/io.context";
+
+const socket = io(import.meta.env.VITE_SERVER_URL);
 
 function Home() {
-  const handleUserLogged = async () => {
-    try {
-      const res = await isUserLogged();
-      if (!res.success) console.log(res.message);
-
-      console.log({ accessToken: getAccessToken() });
-    } catch (error) {
-      // console.log(error);
-    }
-  };
-
   return (
-    <main className="home-main">
-      <Header />
-      <h1>Home</h1>
-      <button onClick={handleUserLogged}>access token</button>
-    </main>
+    <IoContextProvider>
+      <main className="home-main">
+        <Header />
+
+        <Routes>
+          <Route path="/" element={<h1>Home</h1>} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/requests" element={<Requests />} />
+          <Route path="/search" element={<Search />} />
+        </Routes>
+      </main>
+    </IoContextProvider>
   );
 }
 

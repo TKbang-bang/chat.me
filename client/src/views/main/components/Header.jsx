@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { toast } from "sonner";
 import {
   CloseIcon,
+  HomeIcon,
   LogoutIcon,
   MenuIcon,
   SearchIcon,
@@ -18,6 +19,7 @@ function Header() {
       const res = await logout();
       if (!res.success) return toast.error(res.message);
 
+      document.querySelector(".menu-container").classList.remove("active");
       return (window.location.href = "/sign");
     } catch (error) {
       return toast.error(error.response.data.error.message || error.message);
@@ -30,6 +32,14 @@ function Header() {
     }
   };
 
+  document
+    .querySelectorAll(".menu-container .menu .mini-menu .options li")
+    .forEach((link) => {
+      link.addEventListener("click", () => {
+        document.querySelector(".menu-container").classList.remove("active");
+      });
+    });
+
   return (
     <header>
       <Link to="/" className="logo">
@@ -39,13 +49,13 @@ function Header() {
       <button
         className="responsive-item menu-icon"
         onClick={() =>
-          document.querySelector(".menu-container").classList.toggle("active")
+          document.querySelector(".menu-container").classList.add("active")
         }
       >
         <MenuIcon />
       </button>
 
-      <div className="menu-container active" onClick={handleMenuContainerClick}>
+      <div className="menu-container" onClick={handleMenuContainerClick}>
         <div className="menu">
           <div className="close-icon-container">
             <button
@@ -53,7 +63,7 @@ function Header() {
               onClick={() =>
                 document
                   .querySelector(".menu-container")
-                  .classList.toggle("active")
+                  .classList.remove("active")
               }
             >
               <CloseIcon />
@@ -62,6 +72,12 @@ function Header() {
 
           <div className="mini-menu">
             <ul className="options">
+              <li>
+                <NavLink to={"/"}>
+                  <HomeIcon />
+                  <p>Home</p>
+                </NavLink>
+              </li>
               <li>
                 <NavLink to={"/account"}>
                   <UserIcon />
