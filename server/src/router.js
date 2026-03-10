@@ -1,10 +1,13 @@
 import { Router } from "express";
 import authRoutes from "./routes/auth.routes.js";
-import searchRoutes from "./routes/search.routes.js";
+import protectedRoutes from "./routes/protected.routes.js";
+import sessionMiddleware from "./middlewares/session.js";
 
 const router = Router();
 
 router.use("/auth", authRoutes);
-router.use("/search", searchRoutes);
+
+// protected
+router.use("/protected", sessionMiddleware, protectedRoutes);
 
 export default router;

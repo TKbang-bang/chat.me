@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import { SearchIcon2 } from "../../svg/svgs";
+import { toast } from "sonner";
+import { searchService } from "../../services/search.service";
 
 function Search() {
   const [search, setSearch] = useState("");
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     if (!search) return;
 
-    console.log(search);
+    try {
+      const res = await searchService(search);
+      if (!res.success) return toast.error(res.message);
+
+      return;
+    } catch (error) {
+      return toast.error(error.response.data.error.message || error.message);
+    }
   };
 
   return (
