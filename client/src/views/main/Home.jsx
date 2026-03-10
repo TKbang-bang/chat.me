@@ -6,6 +6,7 @@ import Requests from "./Requests";
 import Search from "./Search";
 import io from "socket.io-client";
 import { IoContextProvider } from "../../contexts/io.context";
+import ChatViewer from "./ChatViewer";
 
 const socket = io(import.meta.env.VITE_SERVER_URL);
 
@@ -16,7 +17,7 @@ function Home() {
         <Header />
 
         <Routes>
-          <Route path="/" element={<h1>Home</h1>} />
+          <Route path="*" element={<ChatViewer />} />
           <Route path="/account" element={<Account />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/search" element={<Search />} />

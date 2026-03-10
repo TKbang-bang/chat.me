@@ -2,3 +2,52 @@
   width: 100vw;
   height: 100svh;
 }
+
+.chat-over-view {
+  width: 100vw;
+  height: 92svh;
+  display: flex;
+  flex-direction: row;
+
+  aside {
+    height: 92svh;
+    width: 20vw;
+    background-color: red;
+  }
+
+  .on-chat {
+    height: 92svh;
+    width: 80vw;
+    background-color: blue;
+  }
+}
+
+/* tablets */
+@media screen and (max-width: 1024px) {
+  .chat-over-view {
+    aside {
+      height: 92svh;
+      width: 100vw;
+      background-color: red;
+      z-index: 2;
+      /* position: relative; */
+    }
+
+    .no-chat {
+      display: none;
+    }
+
+    .on-chat.open-chat {
+      height: 100svh;
+      width: 100vw;
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      background: purple;
+    }
+  }
+}
+
+/* phones */
+@media screen and (max-width: 768px) {
+}

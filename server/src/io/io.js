@@ -25,7 +25,7 @@ const ioConnection = (server) => {
     // set online user
     setUserOnline(socket, onlineUsers);
 
-    console.log("Socket connected:", { id: socket.id, userId: socket.userId });
+    // console.log("Socket connected:", { id: socket.id, userId: socket.userId });
 
     // disconnect
     setUserOffline(socket, onlineUsers);

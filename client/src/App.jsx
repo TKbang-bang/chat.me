@@ -40,6 +40,8 @@ function App() {
 
   useEffect(() => {
     isUserAuthenticated();
+
+    if (window.location.pathname === "/") window.location.href = "/chats";
   }, []);
 
   return (
