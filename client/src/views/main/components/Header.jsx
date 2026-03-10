@@ -42,7 +42,7 @@ function Header() {
 
   return (
     <header>
-      <Link to="/" className="logo">
+      <Link to="/chats" className="logo">
         <h1>Chat.me</h1>
       </Link>
 
@@ -73,7 +73,7 @@ function Header() {
           <div className="mini-menu">
             <ul className="options">
               <li>
-                <NavLink to={"/"}>
+                <NavLink to={"/chats"}>
                   <HomeIcon />
                   <p>Home</p>
                 </NavLink>
