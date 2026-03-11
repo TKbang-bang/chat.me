@@ -177,6 +177,10 @@ header {
         background-color: var(--dark-blue);
         color: #fff;
         cursor: pointer;
+
+        &.cancel {
+          background-color: #cf0b0b;
+        }
       }
     }
   }

@@ -40,17 +40,33 @@ my_chats AS (
     FROM chat_participants cp
     LEFT JOIN chats c ON cp.chat_id = c.id
     WHERE cp.user_id = $2
+),
+my_users_requests AS(
+    SELECT
+        receiver_id
+    FROM users_chat_requests
+    WHERE sender_id = $2
+),
+my_groups_requests AS(
+    SELECT
+        chat_id
+    FROM groups_chat_requests
+    WHERE sender_id = $2
 )
 SELECT
     us.id AS id,
     us.username AS name,
     us.picture AS picture,
     us.chat_id AS chat_id,
-    'user' AS type,
+    'direct' AS type,
     CASE
         WHEN us.chat_id IN (SELECT chat_id FROM my_chats) THEN true
         ELSE false
-    END AS is_in_chat
+    END AS is_in_chat,
+    CASE
+        WHEN us.id IN (SELECT receiver_id FROM my_users_requests) THEN true
+        ELSE false
+    END AS has_sent_request
 FROM users_search us
 
 UNION ALL
@@ -64,90 +80,94 @@ SELECT
     CASE
         WHEN gs.chat_id IN (SELECT chat_id FROM my_chats) THEN true
         ELSE false
-    END AS is_in_chat
+    END AS is_in_chat,
+    CASE
+        WHEN gs.chat_id IN (SELECT chat_id FROM my_groups_requests) THEN true
+        ELSE false
+    END AS has_sent_request
 FROM groups_search gs;
     `,
     [search, userId],
   );
 
-  const query2 = await pool.query(
-    `
-    WITH users_search AS (
-    SELECT
-        u.id,
-        u.username,
-        up.picture,
-        c.id AS chat_id
-    FROM users u
-    LEFT JOIN user_profiles up 
-        ON u.id = up.user_id
+  //   const query2 = await pool.query(
+  //     `
+  //     WITH users_search AS (
+  //     SELECT
+  //         u.id,
+  //         u.username,
+  //         up.picture,
+  //         c.id AS chat_id
+  //     FROM users u
+  //     LEFT JOIN user_profiles up
+  //         ON u.id = up.user_id
 
-    /* detectar chat directo entre ambos */
-    LEFT JOIN chats c 
-        ON c.type = 'direct'
+  //     /* detectar chat directo entre ambos */
+  //     LEFT JOIN chats c
+  //         ON c.type = 'direct'
 
-    LEFT JOIN chat_participants cp1 
-        ON cp1.chat_id = c.id 
-        AND cp1.user_id = $2
+  //     LEFT JOIN chat_participants cp1
+  //         ON cp1.chat_id = c.id
+  //         AND cp1.user_id = $2
 
-    LEFT JOIN chat_participants cp2 
-        ON cp2.chat_id = c.id 
-        AND cp2.user_id = u.id
+  //     LEFT JOIN chat_participants cp2
+  //         ON cp2.chat_id = c.id
+  //         AND cp2.user_id = u.id
 
-    WHERE
-        (
-            u.username ILIKE '%' || $1 || '%'
-            OR u.first_name ILIKE '%' || $1 || '%'
-            OR u.last_name ILIKE '%' || $1 || '%'
-        )
-        AND (cp1.chat_id = cp2.chat_id OR c.id IS NULL)
-),
+  //     WHERE
+  //         (
+  //             u.username ILIKE '%' || $1 || '%'
+  //             OR u.first_name ILIKE '%' || $1 || '%'
+  //             OR u.last_name ILIKE '%' || $1 || '%'
+  //         )
+  //         AND (cp1.chat_id = cp2.chat_id OR c.id IS NULL)
+  // ),
 
-groups_search AS (
-    SELECT
-        gp.chat_id,
-        gp.name,
-        gp.picture
-    FROM group_details gp
-    WHERE gp.name ILIKE '%' || $1 || '%'
-),
+  // groups_search AS (
+  //     SELECT
+  //         gp.chat_id,
+  //         gp.name,
+  //         gp.picture
+  //     FROM group_details gp
+  //     WHERE gp.name ILIKE '%' || $1 || '%'
+  // ),
 
-my_chats AS (
-    SELECT
-        cp.chat_id
-    FROM chat_participants cp
-    WHERE cp.user_id = $2
-)
+  // my_chats AS (
+  //     SELECT
+  //         cp.chat_id
+  //     FROM chat_participants cp
+  //     WHERE cp.user_id = $2
+  // )
 
-/* RESULTADO FINAL */
+  // /* RESULTADO FINAL */
 
-SELECT
-    us.id AS id,
-    us.username AS name,
-    us.picture AS picture,
-    us.chat_id AS chat_id,
-    'user' AS type,
-    CASE
-        WHEN us.chat_id IS NOT NULL THEN true
-        ELSE false
-    END AS is_in_chat
-FROM users_search us
+  // SELECT
+  //     us.id AS id,
+  //     us.username AS name,
+  //     us.picture AS picture,
+  //     us.chat_id AS chat_id,
+  //     'user' AS type,
+  //     CASE
+  //         WHEN us.chat_id IS NOT NULL THEN true
+  //         ELSE false
+  //     END AS is_in_chat
+  // FROM users_search us
 
-UNION ALL
+  // UNION ALL
 
-SELECT
-    gs.chat_id AS id,
-    gs.name AS name,
-    gs.picture AS picture,
-    gs.chat_id AS chat_id,
-    'group' AS type,
-    CASE
-        WHEN gs.chat_id IN (SELECT chat_id FROM my_chats) THEN true
-        ELSE false
-    END AS is_in_chat
-FROM groups_search gs;`,
-    [search, userId],
-  );
+  // SELECT
+  //     gs.chat_id AS id,
+  //     gs.name AS name,
+  //     gs.picture AS picture,
+  //     gs.chat_id AS chat_id,
+  //     'group' AS type,
+  //     CASE
+  //         WHEN gs.chat_id IN (SELECT chat_id FROM my_chats) THEN true
+  //         ELSE false
+  //     END AS is_in_chat
+  // FROM groups_search gs;`,
+  //     [search, userId],
+  //   );
 
   return searchResult.rows;
 };

@@ -3,10 +3,44 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { searchService } from "../../../services/search.service";
 import "./.css";
+import {
+  cancelRequest,
+  sendRequest,
+} from "../../../services/activities.service";
 
 function Searched() {
   const [results, setResults] = useState([]);
   const { word } = useParams();
+
+  const handleSendRequest = async (id, type) => {
+    try {
+      const res = await sendRequest(id, type);
+      if (!res.success) return toast.error(res.message);
+
+      setResults(
+        results.map((result) =>
+          result.id === id ? { ...result, has_sent_request: true } : result,
+        ),
+      );
+    } catch (error) {
+      toast.error(error.response?.data?.error?.message || error.message);
+    }
+  };
+
+  const handleCancelRequest = async (id, type) => {
+    try {
+      const res = await cancelRequest(id, type);
+      if (!res.success) return toast.error(res.message);
+
+      setResults(
+        results.map((result) =>
+          result.id === id ? { ...result, has_sent_request: false } : result,
+        ),
+      );
+    } catch (error) {
+      toast.error(error.response?.data?.error?.message || error.message);
+    }
+  };
 
   useEffect(() => {
     const getSearched = async () => {
@@ -33,32 +67,52 @@ function Searched() {
         </div>
       ) : (
         <div className="results">
-          {results.map((result) => {
-            return (
-              <article key={result.id} className="result">
-                <img
-                  src={
-                    result.picture
-                      ? `${import.meta.env.VITE_API_URL}/public/profiles/${result.picture}`
-                      : result.type == "user"
-                        ? "/no-user-2.png"
-                        : "/no-group.png"
-                  }
-                  alt=""
-                />
+          {results &&
+            results.map((result) => {
+              return (
+                <article key={result.id} className="result">
+                  <img
+                    src={
+                      result.picture
+                        ? `${import.meta.env.VITE_API_URL}/public/profiles/${result.picture}`
+                        : result.type == "direct"
+                          ? "/no-user-2.png"
+                          : "/no-group.png"
+                    }
+                    alt=""
+                  />
 
-                <div className="extra">
-                  <h3>{result.name}</h3>
+                  <div className="extra">
+                    <h3>{result.name}</h3>
 
-                  {result.is_in_chat ? (
-                    <button>Go to chat</button>
-                  ) : (
-                    <button>Send request</button>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+                    {result.is_in_chat ? (
+                      <button>Go to chat</button>
+                    ) : (
+                      <>
+                        {result.has_sent_request ? (
+                          <button
+                            className="cancel"
+                            onClick={() =>
+                              handleCancelRequest(result.id, result.type)
+                            }
+                          >
+                            Cancel request
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              handleSendRequest(result.id, result.type)
+                            }
+                          >
+                            Send request
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
         </div>
       )}
     </div>
