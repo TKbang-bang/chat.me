@@ -1,8 +1,8 @@
 import { searchRepository } from "../repositories/search.repository.js";
 
-export const searchSevice = async (search) => {
+export const searchSevice = async (search, userId) => {
   // searching
-  const searched = await searchRepository(search);
+  const searched = await searchRepository(search, userId);
 
   return searched;
 };

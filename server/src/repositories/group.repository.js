@@ -24,6 +24,14 @@ export const createGroup = async (name, description, userId) => {
       [chatId, name, description, userId],
     );
 
+    await client.query(
+      `
+      INSERT INTO chat_participants(user_id, chat_id, role)
+      VALUES ($1, $2, 'admin');
+      `,
+      [userId, chatId],
+    );
+
     await client.query("COMMIT");
 
     return { chatId };
