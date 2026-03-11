@@ -21,7 +21,7 @@ function Home() {
           <Route path="*" element={<ChatViewer />} />
           <Route path="/account" element={<Account />} />
           <Route path="/requests" element={<Requests />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search/*" element={<Search />} />
           <Route path="/groups/create" element={<CreateGroup />} />
         </Routes>
       </main>

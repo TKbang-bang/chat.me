@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SearchIcon2 } from "../../svg/svgs";
 import { toast } from "sonner";
-import { searchService } from "../../services/search.service";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Searched from "./components/Searched";
+import "./.css";
 
 function Search() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(
+    window.location.pathname == "/search/:word"
+      ? setSearch(window.location.pathname.split("/")[2])
+      : "",
+  );
+  const navigate = useNavigate();
 
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     if (!search) return;
 
-    try {
-      const res = await searchService(search);
-      if (!res.success) return toast.error(res.message);
-
-      return;
-    } catch (error) {
-      return toast.error(error.response.data.error.message || error.message);
-    }
+    navigate(`/search/${search}`);
   };
 
   return (
@@ -36,7 +36,39 @@ function Search() {
         </form>
       </div>
 
-      <div className="search-results"></div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="not-searched">
+              <h1>Start typing to search</h1>
+            </div>
+          }
+        />
+
+        <Route path="/:word" element={<Searched />} />
+      </Routes>
+
+      {/* <div className="search-results">
+        {results.map((result) => {
+          return (
+            <article key={result.id}>
+              <img
+                src={
+                  result.picture
+                    ? `${import.meta.env.VITE_BACKEND_URL}/public/profiles/${result.picture}`
+                    : "/no-user2.png"
+                }
+                alt=""
+              />
+
+              <div>
+                <h3>{result.name}</h3>
+              </div>
+            </article>
+          );
+        })}
+      </div> */}
     </div>
   );
 }

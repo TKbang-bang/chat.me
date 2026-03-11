@@ -6,7 +6,7 @@ export const searchController = async (req, res, next) => {
 
     const searched = await searchSevice(search, req.userId);
 
-    return res.status(200).json({ success: true, data: { searched } });
+    return res.status(200).json({ success: true, data: searched });
   } catch (error) {
     return next(error);
   }
