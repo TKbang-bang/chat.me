@@ -45,3 +45,65 @@ export const cancelGroupRequest = async (myId, chatId) => {
     [myId, chatId],
   );
 };
+
+export const getRequests = async (myId) => {
+  const requests = await pool.query(
+    `
+    WITH users_requests AS (
+      SELECT
+        r.id AS request_id,
+        u.id,
+        u.username,
+        up.picture
+      FROM users u
+      JOIN users_chat_requests r
+        ON r.sender_id = u.id
+      LEFT JOIN user_profiles up
+        ON u.id = up.user_id
+      WHERE r.receiver_id = $1
+    ),
+
+    groups_requests AS (
+      SELECT
+        gr.id AS request_id,
+        u.id,
+        u.username,
+        up.picture,
+        g.chat_id,
+        g.name
+      FROM groups_chat_requests gr
+      JOIN users u ON u.id = gr.sender_id
+      LEFT JOIN user_profiles up ON up.user_id = u.id
+      JOIN group_details g ON g.chat_id = gr.chat_id
+      JOIN chat_participants cp ON cp.chat_id = gr.chat_id
+      WHERE cp.user_id = $1
+      AND cp.role = 'admin'
+    )
+
+    SELECT
+      request_id,
+      id,
+      username,
+      picture,
+      'direct' AS type,
+      NULL AS chat_name,
+      NULL AS chat_id
+    FROM users_requests
+
+    UNION ALL
+
+    SELECT
+      request_id,
+      id,
+      username,
+      picture,
+      'group' AS type,
+      name AS group_name,
+      chat_id
+    FROM groups_requests;
+  `,
+    [myId],
+  );
+
+  return requests.rows;
+};

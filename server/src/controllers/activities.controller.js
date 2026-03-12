@@ -1,5 +1,6 @@
 import {
   cancelRequestService,
+  getRequestsService,
   sendRequestService,
 } from "../services/activities.service.js";
 
@@ -22,6 +23,16 @@ export const cancelRequestController = async (req, res, next) => {
     await cancelRequestService(id, type, req.userId);
 
     return res.status(201).end();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getRequestsController = async (req, res, next) => {
+  try {
+    const requests = await getRequestsService(req.userId);
+
+    return res.status(200).json({ success: true, data: requests });
   } catch (error) {
     return next(error);
   }

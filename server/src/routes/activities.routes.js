@@ -1,12 +1,14 @@
 import { Router } from "express";
 import {
   cancelRequestController,
+  getRequestsController,
   sendRequestController,
 } from "../controllers/activities.controller.js";
 
 const activitiesRoutes = Router();
 
-activitiesRoutes.post("/request", sendRequestController);
-activitiesRoutes.post("/request/cancel", cancelRequestController);
+activitiesRoutes.post("/requests", sendRequestController);
+activitiesRoutes.post("/requests/cancel", cancelRequestController);
+activitiesRoutes.get("/requests", getRequestsController);
 
 export default activitiesRoutes;

@@ -3,6 +3,7 @@ import {
   cancelGroupRequest,
   cancelUserRequest,
   getGroupRequest,
+  getRequests,
   getUserRequest,
   sendGroupRequest,
   sendUserRequest,
@@ -48,4 +49,8 @@ export const cancelRequestService = async (toId, type, myId) => {
   } else {
     throw new ServerError("Invalid chat type", "type", 400);
   }
+};
+
+export const getRequestsService = async (myId) => {
+  return await getRequests(myId);
 };
