@@ -196,3 +196,17 @@ export const acceptGroupRequest = async (requestId, userId, chatId) => {
     client.release();
   }
 };
+
+export const declineUsersRequests = async (requestId, senderId, receiverId) => {
+  await pool.query(
+    `DELETE FROM users_chat_requests WHERE id = $1 AND (sender_id = $2 AND receiver_id = $3);`,
+    [requestId, senderId, receiverId],
+  );
+};
+
+export const declineGroupRequests = async (requestId, senderId) => {
+  await pool.query(
+    `DELETE FROM groups_chat_requests WHERE id = $1 AND sender_id = $2;`,
+    [requestId, senderId],
+  );
+};

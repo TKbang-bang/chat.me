@@ -68,3 +68,23 @@ export const requestAccept = async (requestId, userId, type, chatId) => {
     };
   }
 };
+
+export const requestDecline = async (requestId, userId, type) => {
+  try {
+    const response = await api.post(`/activities/requests/decline`, {
+      requestId,
+      userId,
+      type,
+    });
+
+    if (response.status !== 201)
+      return { success: false, message: response.data.error.message };
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};

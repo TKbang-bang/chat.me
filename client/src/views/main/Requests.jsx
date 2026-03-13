@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getRequests, requestAccept } from "../../services/activities.service";
+import {
+  getRequests,
+  requestAccept,
+  requestDecline,
+} from "../../services/activities.service";
 import "./.css";
 import { AcceptIcon, CloseIcon, GroupIcon, UserIcon } from "../../svg/svgs";
 
@@ -28,7 +32,21 @@ function Requests() {
     }
   };
 
-  const handleDeclineRequest = async (id, type) => {};
+  const handleDeclineRequest = async (requestId, userId, type) => {
+    try {
+      const res = await requestDecline(requestId, userId, type);
+      if (!res.success) return toast.error(res.message);
+
+      setRequests(
+        requests.filter(
+          (request) =>
+            request.request_id !== requestId && request.type !== type,
+        ),
+      );
+    } catch (error) {
+      return toast.error(error.response?.data?.error?.message || error.message);
+    }
+  };
 
   useEffect(() => {
     const getAllRequests = async () => {

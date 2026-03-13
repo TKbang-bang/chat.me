@@ -4,6 +4,8 @@ import {
   acceptUserRequest,
   cancelGroupRequest,
   cancelUserRequest,
+  declineGroupRequests,
+  declineUsersRequests,
   getGroupRequest,
   getRequests,
   getUserRequest,
@@ -94,4 +96,19 @@ export const acceptRequestService = async (
   }
 
   return;
+};
+
+export const declineRequestService = async (
+  requestId,
+  senderId,
+  type,
+  myId,
+) => {
+  if (type == "direct") {
+    await declineUsersRequests(requestId, senderId, myId);
+  } else if (type == "group") {
+    await declineGroupRequests(requestId, senderId);
+  } else {
+    throw new ServerError("Invalid chat type", "type", 400);
+  }
 };

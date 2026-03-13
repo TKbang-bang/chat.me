@@ -1,6 +1,7 @@
 import {
   acceptRequestService,
   cancelRequestService,
+  declineRequestService,
   getRequestsService,
   sendRequestService,
 } from "../services/activities.service.js";
@@ -52,4 +53,14 @@ export const acceptRequestController = async (req, res, next) => {
     return next(error);
   }
 };
-export const declineRequestController = async (req, res, next) => {};
+export const declineRequestController = async (req, res, next) => {
+  try {
+    const { requestId, userId, type } = req.body;
+
+    await declineRequestService(requestId, userId, type, req.userId);
+
+    return res.status(201).end();
+  } catch (error) {
+    return next(error);
+  }
+};
