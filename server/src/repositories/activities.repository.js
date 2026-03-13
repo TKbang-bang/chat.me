@@ -14,19 +14,19 @@ export const sendGroupRequest = async (myId, chatId) => {
   );
 };
 
-export const getUserRequest = async (myId, toUserId) => {
+export const getUserRequest = async (senderId, receiverId) => {
   const request = await pool.query(
     `SELECT * FROM users_chat_requests WHERE sender_id = $1 AND receiver_id = $2;`,
-    [myId, toUserId],
+    [senderId, receiverId],
   );
 
   return request.rows[0];
 };
 
-export const getGroupRequest = async (myId, chatId) => {
+export const getGroupRequest = async (senderId, chatId) => {
   const request = await pool.query(
     `SELECT * FROM groups_chat_requests WHERE sender_id = $1 AND chat_id = $2;`,
-    [myId, chatId],
+    [senderId, chatId],
   );
 
   return request.rows[0];
@@ -106,4 +106,93 @@ export const getRequests = async (myId) => {
   );
 
   return requests.rows;
+};
+
+export const acceptUserRequest = async (requestId, userId, myId) => {
+  const client = await pool.connect();
+
+  try {
+    // Begin transaction
+    await client.query("BEGIN");
+
+    // create chat
+    const chat = await client.query(
+      `
+      INSERT INTO chats(type)
+      VALUES ('direct')
+      RETURNING id;
+      `,
+    );
+
+    const chatId = chat.rows[0].id;
+
+    // insert participants
+    await client.query(
+      `
+      INSERT INTO chat_participants(chat_id, user_id)
+      VALUES ($1, $2),
+            ($1, $3);
+      `,
+      [chatId, userId, myId],
+    );
+
+    // first message
+    await client.query(
+      `
+      INSERT INTO messages(chat_id, sender_id, content)
+      VALUES ($1, $2, 'Hello!');
+      `,
+      [chatId, userId],
+    );
+
+    // delete request
+    await client.query(
+      `
+      DELETE FROM users_chat_requests
+      WHERE sender_id = $1 AND receiver_id = $2 OR sender_id = $2 AND receiver_id = $1;
+      `,
+      [userId, myId],
+    );
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+};
+
+export const acceptGroupRequest = async (requestId, userId, chatId) => {
+  const client = await pool.connect();
+
+  try {
+    // Begin transaction
+    await client.query("BEGIN");
+
+    // insert participants
+    await client.query(
+      `
+      INSERT INTO chat_participants(chat_id, user_id)
+      VALUES ($1, $2);
+      `,
+      [chatId, userId],
+    );
+
+    // delete request
+    await client.query(
+      `
+      DELETE FROM groups_chat_requests
+      WHERE id = $1;
+      `,
+      [requestId],
+    );
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };

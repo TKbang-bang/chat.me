@@ -47,3 +47,24 @@ export const getRequests = async () => {
     };
   }
 };
+
+export const requestAccept = async (requestId, userId, type, chatId) => {
+  try {
+    const response = await api.post(`/activities/requests/accept`, {
+      requestId,
+      userId,
+      type,
+      chatId,
+    });
+
+    if (response.status !== 201)
+      return { success: false, message: response.data.error.message };
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};

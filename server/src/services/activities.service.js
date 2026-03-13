@@ -1,5 +1,7 @@
 import ServerError from "../error/ServerError.js";
 import {
+  acceptGroupRequest,
+  acceptUserRequest,
   cancelGroupRequest,
   cancelUserRequest,
   getGroupRequest,
@@ -29,7 +31,7 @@ export const sendRequestService = async (toId, type, myId) => {
     const group = await getGroupChatById(toId);
     if (!group) throw new ServerError("Group not found", "group", 404);
 
-    // verify if the has already sent a request to the group
+    // verify if the user has already sent a request to the group
     const request = await getGroupRequest(myId, toId);
     if (request) throw new ServerError("Request already sent", "request", 400);
 
@@ -53,4 +55,43 @@ export const cancelRequestService = async (toId, type, myId) => {
 
 export const getRequestsService = async (myId) => {
   return await getRequests(myId);
+};
+
+export const acceptRequestService = async (
+  requestId,
+  userId,
+  type,
+  myId,
+  chatId,
+) => {
+  if (type == "direct") {
+    // verify if request exists
+    const request = await getUserRequest(userId, myId);
+    if (!request) throw new ServerError("Request not found", "request", 404);
+
+    console.log(
+      { userId, myId },
+      { sender: request.sender_id, receiver: request.receiver_id },
+    );
+
+    if (request.sender_id != userId || request.receiver_id != myId)
+      throw new ServerError("Inconsistent request", "request", 400);
+
+    // accept request and create chat
+    await acceptUserRequest(requestId, userId, myId);
+  } else if (type == "group") {
+    // verify if request exists
+    const request = await getGroupRequest(userId, chatId);
+    if (!request) throw new ServerError("Request not found", "request", 404);
+
+    if (request.sender_id != userId)
+      throw new ServerError("Inconsistent request", "request", 400);
+
+    // accept request and create chat
+    await acceptGroupRequest(requestId, userId, chatId);
+  } else {
+    throw new ServerError("Invalid chat type", "type", 400);
+  }
+
+  return;
 };
