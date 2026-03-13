@@ -14,7 +14,8 @@
     width: 20vw;
     background-color: #fff;
     border: 1px solid #000;
-    padding-block: 1rem;
+    padding-bottom: 2rem;
+    overflow-y: auto;
   }
 
   .on-chat {
