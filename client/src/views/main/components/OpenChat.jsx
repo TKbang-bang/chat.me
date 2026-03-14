@@ -1,4 +1,4 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeftIcon, SendIcon } from "../../../svg/svgs";
 import "./.css";
@@ -12,6 +12,7 @@ function OpenChat() {
   const [chatMessages, setChatMessages] = useState({});
   const [messgae, setMessage] = useState("");
   const socket = useContext(IoContext);
+  const scrollerRef = useRef(null);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -51,6 +52,7 @@ function OpenChat() {
         if (!res.success) return toast.error(res.message);
 
         setChatMessages(res.data);
+
         return;
       } catch (error) {
         return toast.error(error.response.data.error.message || error.message);
@@ -59,6 +61,13 @@ function OpenChat() {
 
     handleGettingChatMessages();
   }, [chatId]);
+
+  useEffect(() => {
+    scrollerRef.current?.scrollIntoView({
+      block: "end",
+      inline: "nearest",
+    });
+  }, [chatMessages.messages]);
 
   return (
     <div className="on-chat open-chat">
@@ -109,13 +118,13 @@ function OpenChat() {
                           ? `${import.meta.env.VITE_BACKEND_URL}/public/profiles/${message?.picture}`
                           : "/no-user.png"
                       }
-                      alt={message?.username}
+                      alt={message?.sender_name}
                     />
 
                     <div className="message">
-                      <h3>{message?.username}</h3>
+                      <h3>{message?.sender_name}</h3>
                       <p className="content">{message?.content}</p>
-                      <p className="date">{message?.created_at}</p>
+                      <p className="date">{message?.date}</p>
                     </div>
                   </article>
                 );
@@ -131,13 +140,15 @@ function OpenChat() {
                   >
                     <div className="message">
                       <p className="content">{message?.content}</p>
-                      <p className="date">{message?.created_at}</p>
+                      <p className="date">{message?.date}</p>
                     </div>
                   </article>
                 );
               })}
             </>
           )}
+
+          <div ref={scrollerRef} className="scroller"></div>
         </div>
 
         <div className="message-form-container">

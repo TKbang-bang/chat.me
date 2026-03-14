@@ -213,6 +213,22 @@ header {
       position: relative;
       overflow: hidden;
 
+      &.active {
+        background-color: var(--gray-blue);
+
+        .extra {
+          .message {
+            span {
+              color: var(--good-blue);
+            }
+          }
+
+          .date {
+            color: var(--good-blue);
+          }
+        }
+      }
+
       &::after {
         content: "";
         width: 100%;
@@ -383,6 +399,7 @@ header {
     max-height: 84svh;
     overflow-y: auto;
     padding-block: 2rem 4rem;
+    scroll-padding-bottom: 8rem;
     padding-inline: 1rem;
     display: flex;
     justify-content: flex-start;

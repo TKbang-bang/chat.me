@@ -1,11 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { getChats } from "../../../services/chats.service";
 import { NavLink } from "react-router-dom";
 import "./.css";
+import { IoContext } from "../../../contexts/io.context";
 
 function ChatsList() {
   const [chats, setChats] = useState([]);
+  const socket = useContext(IoContext);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("server_message", (data) => {
+      setChats((prev) =>
+        prev.map((chat) =>
+          chat.chat_id == data.chatId ? { ...chat, last_message: data } : chat,
+        ),
+      )?.sort(
+        (a, b) =>
+          new Date(b.last_message.created_at) -
+          new Date(a.last_message.created_at),
+      );
+    });
+  }, [socket]);
 
   useEffect(() => {
     const gettingChats = async () => {
@@ -13,7 +31,13 @@ function ChatsList() {
         const res = await getChats();
         if (!res.success) return toast.error(res.message);
 
-        setChats(res.data);
+        setChats(
+          res.data.sort(
+            (a, b) =>
+              new Date(b.last_message.created_at) -
+              new Date(a.last_message.created_at),
+          ),
+        );
       } catch (error) {
         return toast.error(error.response.data.error.message || error.message);
       }
@@ -63,7 +87,7 @@ function ChatsList() {
                       {/* {`${chat.last_message.created_at.split(".")[0].split("T")[0]}:${
                         chat.last_message.created_at.split(".")[0].split("T")[1]
                       }`} */}
-                      {chat.last_message.created_at}
+                      {chat.last_message.date}
                     </p>
                   </div>
                 </NavLink>

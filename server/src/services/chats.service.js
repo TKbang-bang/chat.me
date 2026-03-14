@@ -22,7 +22,8 @@ export const getChatsService = async (userId) => {
         sender_id: chat.last_message_sender,
         sender_name: chat.last_message_sender_username,
         me: chat.last_message_sender === userId,
-        created_at: myDate(chat.last_message_created_at),
+        date: myDate(chat.last_message_created_at),
+        created_at: chat.last_message_created_at,
       },
     };
   });
@@ -44,7 +45,8 @@ export const getChatMessagesService = async (chatId, userId) => {
         content: message.content,
         sender_id: message.sender_id,
         me: message.sender_id === userId,
-        created_at: myDate(message.created_at),
+        date: myDate(message.created_at),
+        created_at: message.created_at,
       };
     });
 
@@ -63,7 +65,8 @@ export const getChatMessagesService = async (chatId, userId) => {
         username: message.sender_username,
         picture: message.picture,
         me: message.sender_id === userId,
-        created_at: myDate(message.created_at),
+        date: myDate(message.created_at),
+        created_at: message.created_at,
       };
     });
 
