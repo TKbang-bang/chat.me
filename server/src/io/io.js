@@ -4,6 +4,7 @@ import {
   setUserOffline,
   setUserOnline,
 } from "./services/io.auth.service.js";
+import { ioController } from "./io.controller.js";
 
 const ioConnection = (server) => {
   // io
@@ -24,6 +25,9 @@ const ioConnection = (server) => {
   io.on("connection", (socket) => {
     // set online user
     setUserOnline(socket, onlineUsers);
+
+    // controller
+    ioController(socket, io, onlineUsers);
 
     // console.log("Socket connected:", { id: socket.id, userId: socket.userId });
 

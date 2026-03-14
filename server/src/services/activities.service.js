@@ -71,11 +71,6 @@ export const acceptRequestService = async (
     const request = await getUserRequest(userId, myId);
     if (!request) throw new ServerError("Request not found", "request", 404);
 
-    console.log(
-      { userId, myId },
-      { sender: request.sender_id, receiver: request.receiver_id },
-    );
-
     if (request.sender_id != userId || request.receiver_id != myId)
       throw new ServerError("Inconsistent request", "request", 400);
 

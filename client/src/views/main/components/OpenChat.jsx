@@ -1,19 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeftIcon, CloseIcon, SendIcon } from "../../../svg/svgs";
+import { ArrowLeftIcon, SendIcon } from "../../../svg/svgs";
 import "./.css";
 import { toast } from "sonner";
 import { getChatMessages } from "../../../services/chats.service";
+import { IoContext } from "../../../contexts/io.context";
 
 function OpenChat() {
   const { chatId } = useParams();
   const navigate = useNavigate();
   const [chatMessages, setChatMessages] = useState({});
   const [messgae, setMessage] = useState("");
+  const socket = useContext(IoContext);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
+
+    if (!messgae) return;
+
+    socket.emit("client_message", {
+      content: messgae,
+      chat: chatMessages?.chat,
+    });
+
+    setMessage("");
   };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleMessage = (data) => {
+      data.chatId == chatId &&
+        setChatMessages((prev) => ({
+          ...prev,
+          messages: [...prev.messages, data],
+        }));
+    };
+
+    socket.on("server_message", handleMessage);
+
+    return () => {
+      socket.off("server_message", handleMessage);
+    };
+  }, [socket]);
 
   useEffect(() => {
     const handleGettingChatMessages = async () => {
