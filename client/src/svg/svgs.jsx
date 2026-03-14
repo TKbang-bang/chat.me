@@ -188,3 +188,31 @@ export const AcceptIcon = () => {
     </svg>
   );
 };
+
+export const ArrowLeftIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#1f1f1f"
+    >
+      <path d="M400-240 160-480l240-240 56 58-142 142h486v80H314l142 142-56 58Z" />
+    </svg>
+  );
+};
+
+export const SendIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#1f1f1f"
+    >
+      <path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z" />
+    </svg>
+  );
+};

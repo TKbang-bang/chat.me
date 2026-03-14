@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getChatsController } from "../controllers/chats.controller.js";
+import {
+  getChatMessagesController,
+  getChatsController,
+} from "../controllers/chats.controller.js";
 
 const chatsRoutes = Router();
 
 chatsRoutes.get("/", getChatsController);
+chatsRoutes.get("/:chatId", getChatMessagesController);
 
 export default chatsRoutes;

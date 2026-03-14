@@ -55,7 +55,9 @@ function ChatsList() {
                             ? ""
                             : chat.last_message.sender_name + ": "}
                       </span>
-                      <p className="content">{chat.last_message.content}</p>
+                      <span className="content">
+                        {chat.last_message.content}
+                      </span>
                     </p>
                     <p className="date">
                       {/* {`${chat.last_message.created_at.split(".")[0].split("T")[0]}:${

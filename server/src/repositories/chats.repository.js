@@ -57,3 +57,99 @@ export const getChats = async (userId) => {
 
   return chats.rows;
 };
+
+export const getChatById = async (id) => {
+  const chat = await pool.query(`SELECT * FROM chats WHERE id = $1`, [id]);
+
+  return chat.rows[0];
+};
+
+export const getUserChatMessages = async (chatId, userId) => {
+  // getting chat
+  const chat = await pool.query(
+    `
+        SELECT
+            id,
+            type
+        FROM chats
+        WHERE id = $1
+        AND type = 'direct'
+        `,
+    [chatId],
+  );
+
+  // getting user (direct chat)
+  const user = await pool.query(
+    `
+    SELECT
+        u.id,
+        u.username AS name,
+        up.picture
+    FROM users u
+    LEFT JOIN user_profiles up ON up.user_id = u.id
+    JOIN chat_participants cp ON cp.user_id = u.id AND cp.chat_id = $1
+    WHERE u.id != $2
+    `,
+    [chatId, userId],
+  );
+
+  // getting messages
+  const messages = await pool.query(
+    `
+    SELECT
+        *
+    FROM messages
+    WHERE chat_id = $1
+    ORDER BY created_at ASC
+    `,
+    [chatId],
+  );
+
+  return { chat: chat.rows[0], user: user.rows[0], messages: messages.rows };
+};
+
+export const getGroupChatMessages = async (chatId) => {
+  // getting chat
+  const chat = await pool.query(
+    `
+          SELECT
+              id,
+              type
+          FROM chats
+          WHERE id = $1
+          AND type = 'group'
+          `,
+    [chatId],
+  );
+
+  // getting group details
+  const group = await pool.query(
+    `
+      SELECT
+          chat_id AS id,
+          name,
+          picture
+      FROM group_details
+      WHERE chat_id = $1
+      `,
+    [chatId],
+  );
+
+  // getting messages
+  const messages = await pool.query(
+    `
+      SELECT
+          m.*,
+          u.username AS sender_username,
+          up.picture
+      FROM messages m
+      JOIN users u ON u.id = m.sender_id
+      LEFT JOIN user_profiles up ON up.user_id = u.id
+      WHERE chat_id = $1
+      ORDER BY created_at ASC
+      `,
+    [chatId],
+  );
+
+  return { chat: chat.rows[0], group: group.rows[0], messages: messages.rows };
+};

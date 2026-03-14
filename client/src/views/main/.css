@@ -11,7 +11,7 @@
 
   aside {
     height: 92svh;
-    width: 20vw;
+    width: 25vw;
     background-color: #fff;
     border: 1px solid #000;
     padding-bottom: 2rem;
@@ -20,8 +20,8 @@
 
   .on-chat {
     height: 92svh;
-    width: 80vw;
-    background-color: blue;
+    width: 75vw;
+    /* background-color: blue; */
   }
 }
 
@@ -262,7 +262,6 @@
     aside {
       height: 92svh;
       width: 100vw;
-      background-color: red;
     }
 
     .no-chat {
@@ -275,7 +274,7 @@
       position: fixed;
       inset: 0;
       z-index: 3;
-      background: purple;
+      /* background: purple; */
     }
   }
 
