@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   deleteGroupChat,
@@ -8,9 +8,11 @@ import {
 import "./.css";
 import { CloseIcon } from "../../../svg/svgs";
 import { userBlock, userUnBlock } from "../../../services/users.service";
+import { IoContext } from "../../../contexts/io.context";
 
 function InfoContainer({ chatId }) {
   const [chatInfo, setChatInfo] = useState({});
+  const socket = useContext(IoContext);
 
   const handleLeaveGroup = async (groupId) => {
     try {
@@ -68,6 +70,22 @@ function InfoContainer({ chatId }) {
       return toast.error(error.response.data.error.message || error.message);
     }
   };
+
+  const handleKickOut = async (chatId, userId) => {
+    socket.emit("kick-out", { chatId, userId });
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("server_kick-out", (data) => {
+      if (!data.success) return;
+
+      if (data.you) return (window.location.href = "/chats");
+
+      return window.location.reload();
+    });
+  }, [socket]);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -173,7 +191,15 @@ function InfoContainer({ chatId }) {
                       <p className="role">{user.role}</p>
                     </div>
                     {chatInfo.is_admin && (
-                      <>{user.role != "admin" && <button>Kick out</button>}</>
+                      <>
+                        {user.role != "admin" && (
+                          <button
+                            onClick={() => handleKickOut(chatInfo.id, user.id)}
+                          >
+                            Kick out
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 ))}

@@ -1,6 +1,7 @@
 import {
   createMessageService,
   getUsersInChatService,
+  userKickOutService,
 } from "./services/messages.service.js";
 
 export const ioController = (socket, io, onlineUsers) => {
@@ -22,6 +23,23 @@ export const ioController = (socket, io, onlineUsers) => {
         for (const socketId of sockets) {
           io.to(socketId).emit("server_message", { ...message, me: false });
         }
+      }
+    } catch (error) {
+      return socket.emit("server_error", error.message);
+    }
+  });
+
+  socket.on("kick-out", async (data) => {
+    try {
+      await userKickOutService(data.chatId, data.userId, socket.userId);
+
+      socket.emit("server_kick-out", { success: true });
+
+      const sockets = onlineUsers.get(data.userId);
+      if (!sockets) return;
+
+      for (const socketId of sockets) {
+        io.to(socketId).emit("server_kick-out", { success: true, you: true });
       }
     } catch (error) {
       return socket.emit("server_error", error.message);

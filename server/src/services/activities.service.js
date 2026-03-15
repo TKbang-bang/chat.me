@@ -24,10 +24,12 @@ export const sendRequestService = async (toId, type, myId) => {
 
     // verify if user is blockd
     const userBlocked = await isUserBlocked(user.id, myId);
-    if (userBlocked.length > 1)
-      throw new ServerError("Error, user may have blocked you", "user", 400);
-    if (userBlocked[0].user_id === myId)
-      throw new ServerError("Error, you have blocked this user", "user", 400);
+    if (userBlocked[0]) {
+      if (userBlocked.length > 1)
+        throw new ServerError("Error, user may have blocked you", "user", 400);
+      if (userBlocked[0].user_id === myId)
+        throw new ServerError("Error, you have blocked this user", "user", 400);
+    }
 
     // verify if the has already sent a request to the user
     const request = await getUserRequest(myId, toId);

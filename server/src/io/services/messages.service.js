@@ -4,6 +4,7 @@ import {
   getMessageSender,
   getUserIsBlocked,
   getUsersInChat,
+  kickUserOut,
 } from "../repository/messages.repository.js";
 import myDate from "../../utils/dateFormat.js";
 
@@ -12,11 +13,7 @@ export const createMessageService = async (data, userId) => {
   if (data.chat.type == "direct") {
     const isBlocked = await getUserIsBlocked(data.chat.id, userId);
     if (isBlocked.is_blocked)
-      throw new Error(
-        "You are blocked or you have blocked this user",
-        "user",
-        400,
-      );
+      throw new Error("You are blocked or you have blocked this user");
   }
 
   // verify if the user is allowed to send a message to the chat
@@ -27,7 +24,7 @@ export const createMessageService = async (data, userId) => {
   );
 
   if (!chatByParticipant)
-    throw new Error("You are not allowed to send messages", "chat", 404);
+    throw new Error("You are not allowed to send messages");
 
   // create message
   const messageCreated = await createMessage(
@@ -68,4 +65,13 @@ export const getUsersInChatService = async (chatId) => {
   const { rows } = await getUsersInChat(chatId);
 
   return rows;
+};
+
+export const userKickOutService = async (chatId, userId, myId) => {
+  // verify if user is admin
+  const chatParticipant = await getChatByParticipantId(chatId, myId, "group");
+  if (chatParticipant.role != "admin") throw new Error("Task not allowed");
+
+  // kicking user out
+  await kickUserOut(chatId, userId);
 };

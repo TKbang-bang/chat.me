@@ -44,8 +44,6 @@ export const acceptRequestController = async (req, res, next) => {
   try {
     const { requestId, userId, type, chatId = null } = req.body;
 
-    console.log({ requestId, userId, type, myId: req.userId, chatId });
-
     await acceptRequestService(requestId, userId, type, req.userId, chatId);
 
     return res.status(201).end();

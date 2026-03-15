@@ -81,3 +81,13 @@ export const getUserIsBlocked = async (chatId, userId) => {
 
   return isBlocked.rows[0];
 };
+
+export const kickUserOut = async (chatId, userId) => {
+  await pool.query(
+    `
+    DELETE FROM chat_participants
+    WHERE chat_id = $1 AND user_id = $2
+    `,
+    [chatId, userId],
+  );
+};
