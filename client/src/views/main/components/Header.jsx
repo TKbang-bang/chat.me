@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -12,14 +12,18 @@ import {
 } from "../../../svg/svgs";
 import { logout } from "../../../services/auth.service";
 import "./.css";
+import { IoContext } from "../../../contexts/io.context";
 
 function Header() {
+  const socket = useContext(IoContext);
+
   const handleLogout = async () => {
     try {
       const res = await logout();
       if (!res.success) return toast.error(res.message);
 
       document.querySelector(".menu-container").classList.remove("active");
+      socket.disconnect();
       return (window.location.href = "/sign");
     } catch (error) {
       return toast.error(error.response.data.error.message || error.message);
@@ -78,12 +82,12 @@ function Header() {
                   <p>Home</p>
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to={"/account"}>
                   <UserIcon />
                   <p>Account</p>
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink to={"/requests"}>
                   <UserRequestIcon />

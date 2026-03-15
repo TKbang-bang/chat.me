@@ -200,6 +200,7 @@ header {
   flex-direction: column;
   position: relative;
   z-index: 0;
+  border: 1px solid var(--gray-blue);
 
   .no-chats {
     width: 100%;
@@ -505,7 +506,7 @@ header {
   }
 
   .info-container {
-    border: 1px solid #000;
+    border: 1px solid var(--gray-blue);
     display: flex;
     justify-content: flex-start;
     align-items: center;
