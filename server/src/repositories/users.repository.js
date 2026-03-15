@@ -83,26 +83,33 @@ export const preSignUser = async (
   return user.rows[0];
 };
 
-export const deletePreUser = async (id) => {
-  const user = await pool.query(
-    `DELETE FROM pending_users WHERE id = $1 RETURNING *;`,
-    [id],
-  );
-
-  return user.rows[0];
-};
-
 export const createUser = async (id) => {
-  const user = await pool.query(
-    `
+  const client = await pool.connect();
+  try {
+    client.query("BEGIN");
+
+    // create user
+    const user = await pool.query(
+      `
     INSERT INTO users (first_name, last_name, username, email, password)
     SELECT first_name, last_name, username, email, password
     FROM pending_users
     WHERE id = $1
     RETURNING *;
     `,
-    [id],
-  );
+      [id],
+    );
+
+    // delete pending user
+    await pool.query(`DELETE FROM pending_users WHERE id = $1;`, [id]);
+
+    client.query("COMMIT");
+
+    return user.rows[0];
+  } catch (error) {
+    client.query("ROLLBACK");
+    throw error;
+  }
 
   return user.rows[0];
 };

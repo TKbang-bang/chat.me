@@ -4,7 +4,6 @@ import { randomBytes } from "crypto";
 import ServerError from "../error/ServerError.js";
 import {
   createUser,
-  deletePreUser,
   getPreUserByEmail,
   getPreUserByToken,
   getPreUserByUsername,
@@ -130,11 +129,8 @@ export const verifyingCode = async (token, code) => {
   if (!isCodeCorrect)
     throw new ServerError("Verification code did not match", "code", 400);
 
-  // creating new user
+  // creating new user and deleting pending user
   const userCreated = await createUser(userByToken.id);
-
-  // deleting pending user
-  await deletePreUser(userByToken.id);
 
   return userCreated;
 };
