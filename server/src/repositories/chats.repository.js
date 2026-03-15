@@ -84,7 +84,16 @@ export const getUserChatMessages = async (chatId, userId) => {
     SELECT
         u.id,
         u.username AS name,
-        up.picture
+        up.picture,
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM users_blocked
+            WHERE user_id = $2
+            AND blocked_user_id = u.id
+        ) THEN true
+        ELSE false
+        END AS is_blocked
     FROM users u
     LEFT JOIN user_profiles up ON up.user_id = u.id
     JOIN chat_participants cp ON cp.user_id = u.id AND cp.chat_id = $1
@@ -154,7 +163,7 @@ export const getGroupChatMessages = async (chatId) => {
   return { chat: chat.rows[0], group: group.rows[0], messages: messages.rows };
 };
 
-export const getUserChatInfo = async (chatId) => {
+export const getUserChatInfo = async (chatId, userId) => {
   const user = await pool.query(
     `
     SELECT
@@ -163,13 +172,23 @@ export const getUserChatInfo = async (chatId) => {
         u.first_name,
         u.last_name,
         up.picture,
-        'direct' AS type
+        'direct' AS type,
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM users_blocked
+            WHERE user_id = $2
+            AND blocked_user_id = u.id
+          ) THEN true
+          ELSE false
+        END AS is_blocked
     FROM users u
     LEFT JOIN user_profiles up ON up.user_id = u.id
     JOIN chat_participants cp ON cp.user_id = u.id AND cp.chat_id = $1
     JOIN chats c ON c.id = cp.chat_id AND c.type = 'direct'
+    WHERE u.id != $2
     `,
-    [chatId],
+    [chatId, userId],
   );
 
   return user.rows[0];

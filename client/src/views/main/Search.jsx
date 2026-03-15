@@ -53,27 +53,6 @@ function Search() {
 
         <Route path="/:word" element={<Searched />} />
       </Routes>
-
-      {/* <div className="search-results">
-        {results.map((result) => {
-          return (
-            <article key={result.id}>
-              <img
-                src={
-                  result.picture
-                    ? `${import.meta.env.VITE_BACKEND_URL}/public/profiles/${result.picture}`
-                    : "/no-user2.png"
-                }
-                alt=""
-              />
-
-              <div>
-                <h3>{result.name}</h3>
-              </div>
-            </article>
-          );
-        })}
-      </div> */}
     </div>
   );
 }

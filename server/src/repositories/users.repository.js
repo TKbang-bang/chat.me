@@ -110,6 +110,24 @@ export const createUser = async (id) => {
     client.query("ROLLBACK");
     throw error;
   }
+};
 
-  return user.rows[0];
+export const userBlock = async (userId, myId) => {
+  await pool.query(
+    `
+    INSERT INTO users_blocked (user_id, blocked_user_id)
+    VALUES ($1, $2);
+    `,
+    [myId, userId],
+  );
+};
+
+export const userUnblock = async (userId, myId) => {
+  await pool.query(
+    `
+    DELETE FROM users_blocked
+    WHERE user_id = $1 AND blocked_user_id = $2;
+    `,
+    [myId, userId],
+  );
 };

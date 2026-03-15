@@ -88,7 +88,7 @@ export const getChatInfoService = async (chatId, userId) => {
   if (!chat) throw new ServerError("Chat not found", "chat", 404);
 
   if (chat.type == "direct") {
-    const user = await getUserChatInfo(chatId);
+    const user = await getUserChatInfo(chatId, userId);
     return user;
   } else if (chat.type == "group") {
     const group = await getGroupChatInfo(chatId, userId);

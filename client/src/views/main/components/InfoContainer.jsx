@@ -7,6 +7,7 @@ import {
 } from "../../../services/chats.service";
 import "./.css";
 import { CloseIcon } from "../../../svg/svgs";
+import { userBlock, userUnBlock } from "../../../services/users.service";
 
 function InfoContainer({ chatId }) {
   const [chatInfo, setChatInfo] = useState({});
@@ -44,6 +45,28 @@ function InfoContainer({ chatId }) {
         label: "Cancel",
       },
     });
+  };
+
+  const handleBlock = async (id) => {
+    try {
+      const res = await userBlock(id);
+      if (!res.success) return toast.error(res.message);
+
+      return window.location.reload();
+    } catch (error) {
+      return toast.error(error.response.data.error.message || error.message);
+    }
+  };
+
+  const handleUnBlock = async (id) => {
+    try {
+      const res = await userUnBlock(id);
+      if (!res.success) return toast.error(res.message);
+
+      return window.location.reload();
+    } catch (error) {
+      return toast.error(error.response.data.error.message || error.message);
+    }
   };
 
   useEffect(() => {
@@ -91,7 +114,18 @@ function InfoContainer({ chatId }) {
               </div>
 
               <div className="options">
-                <button className="block">Block</button>
+                {!chatInfo.is_blocked ? (
+                  <button
+                    className="block"
+                    onClick={() => handleBlock(chatInfo.id)}
+                  >
+                    Block
+                  </button>
+                ) : (
+                  <button onClick={() => handleUnBlock(chatInfo.id)}>
+                    Unblock
+                  </button>
+                )}
               </div>
             </div>
           ) : (

@@ -7,6 +7,7 @@ import {
   cancelRequest,
   sendRequest,
 } from "../../../services/activities.service";
+import { userUnBlock } from "../../../services/users.service";
 
 function Searched() {
   const [results, setResults] = useState([]);
@@ -43,6 +44,21 @@ function Searched() {
     }
   };
 
+  const handleUnblock = async (id) => {
+    try {
+      const res = await userUnBlock(id);
+      if (!res.success) return toast.error(res.message);
+
+      setResults(
+        results.map((result) =>
+          result.id === id ? { ...result, is_blocked: false } : result,
+        ),
+      );
+    } catch (error) {
+      toast.error(error.response?.data?.error?.message || error.message);
+    }
+  };
+
   useEffect(() => {
     const getSearched = async () => {
       try {
@@ -50,7 +66,6 @@ function Searched() {
         if (!res.success) return toast.error(res.message);
 
         setResults(res.data);
-        console.log(res.data);
       } catch (error) {
         return toast.error(
           error.response?.data?.error?.message || error.message,
@@ -87,31 +102,39 @@ function Searched() {
                   <div className="extra">
                     <h3>{result.name}</h3>
 
-                    {result.is_in_chat ? (
-                      <button
-                        onClick={() => navigate(`/chats/${result.chat_id}`)}
-                      >
-                        Go to chat
+                    {result.is_blocked ? (
+                      <button onClick={() => handleUnblock(result.id)}>
+                        Unblock
                       </button>
                     ) : (
                       <>
-                        {result.has_sent_request ? (
+                        {result.is_in_chat ? (
                           <button
-                            className="cancel"
-                            onClick={() =>
-                              handleCancelRequest(result.id, result.type)
-                            }
+                            onClick={() => navigate(`/chats/${result.chat_id}`)}
                           >
-                            Cancel request
+                            Go to chat
                           </button>
                         ) : (
-                          <button
-                            onClick={() =>
-                              handleSendRequest(result.id, result.type)
-                            }
-                          >
-                            Send request
-                          </button>
+                          <>
+                            {result.has_sent_request ? (
+                              <button
+                                className="cancel"
+                                onClick={() =>
+                                  handleCancelRequest(result.id, result.type)
+                                }
+                              >
+                                Cancel request
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() =>
+                                  handleSendRequest(result.id, result.type)
+                                }
+                              >
+                                Send request
+                              </button>
+                            )}
+                          </>
                         )}
                       </>
                     )}

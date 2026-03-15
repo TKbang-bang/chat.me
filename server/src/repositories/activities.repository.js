@@ -210,3 +210,12 @@ export const declineGroupRequests = async (requestId, senderId) => {
     [requestId, senderId],
   );
 };
+
+export const isUserBlocked = async (userId, myId) => {
+  const result = await pool.query(
+    `SELECT * FROM blocked_users WHERE user_id = $1 AND blocked_user_id = $2 OR user_id = $2 AND blocked_user_id = $1;`,
+    [userId, myId],
+  );
+
+  return result.rows;
+};
