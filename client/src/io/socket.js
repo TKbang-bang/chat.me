@@ -24,6 +24,8 @@ const socketService = async () => {
       toast.error(err.message);
     });
 
+    socket.on("server_error", (message) => toast.error(message));
+
     return socket;
   } catch {
     return null;

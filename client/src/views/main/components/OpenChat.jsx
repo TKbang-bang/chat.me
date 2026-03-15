@@ -53,7 +53,6 @@ function OpenChat() {
         if (!res.success) return toast.error(res.message);
 
         setChatMessages(res.data);
-        console.log(res.data);
 
         return;
       } catch (error) {
@@ -164,19 +163,23 @@ function OpenChat() {
         </div>
 
         {!chatMessages?.user?.is_blocked && (
-          <div className="message-form-container">
-            <form onSubmit={handleSendMessage} className="message-form">
-              <input
-                type="text"
-                placeholder="Type a message"
-                value={messgae}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <button type="submit">
-                <SendIcon />
-              </button>
-            </form>
-          </div>
+          <>
+            {!chatMessages?.user?.has_blocked && (
+              <div className="message-form-container">
+                <form onSubmit={handleSendMessage} className="message-form">
+                  <input
+                    type="text"
+                    placeholder="Type a message"
+                    value={messgae}
+                    onChange={(e) => setMessage(e.target.value)}
+                  />
+                  <button type="submit">
+                    <SendIcon />
+                  </button>
+                </form>
+              </div>
+            )}
+          </>
         )}
       </div>
 

@@ -56,3 +56,28 @@ export const getUsersInChat = (chatId) => {
     [chatId],
   );
 };
+
+export const getUserIsBlocked = async (chatId, userId) => {
+  const isBlocked = await pool.query(
+    `
+    WITH user_in_direct_chat AS (
+        SELECT
+            cp.user_id
+        FROM chat_participants cp
+        JOIN chats c ON c.id = cp.chat_id AND c.type = 'direct'
+        WHERE cp.chat_id = $2 AND cp.user_id != $1
+    )
+     SELECT
+        EXISTS (
+            SELECT 1
+            FROM users_blocked
+            WHERE user_id = $1
+            AND blocked_user_id IN (SELECT user_id FROM user_in_direct_chat)
+            OR user_id IN (SELECT user_id FROM user_in_direct_chat) AND blocked_user_id = $1
+        ) AS is_blocked
+    `,
+    [userId, chatId],
+  );
+
+  return isBlocked.rows[0];
+};

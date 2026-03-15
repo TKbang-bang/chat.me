@@ -2,17 +2,30 @@ import {
   createMessage,
   getChatByParticipantId,
   getMessageSender,
+  getUserIsBlocked,
   getUsersInChat,
 } from "../repository/messages.repository.js";
 import myDate from "../../utils/dateFormat.js";
 
 export const createMessageService = async (data, userId) => {
+  // verify if the user is blocked o has blocked the user
+  if (data.chat.type == "direct") {
+    const isBlocked = await getUserIsBlocked(data.chat.id, userId);
+    if (isBlocked.is_blocked)
+      throw new Error(
+        "You are blocked or you have blocked this user",
+        "user",
+        400,
+      );
+  }
+
   // verify if the user is allowed to send a message to the chat
   const chatByParticipant = await getChatByParticipantId(
     data.chat.id,
     userId,
     data.chat.type,
   );
+
   if (!chatByParticipant)
     throw new Error("You are not allowed to send messages", "chat", 404);
 

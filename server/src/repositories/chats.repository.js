@@ -93,7 +93,16 @@ export const getUserChatMessages = async (chatId, userId) => {
             AND blocked_user_id = u.id
         ) THEN true
         ELSE false
-        END AS is_blocked
+        END AS is_blocked,
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM users_blocked
+            WHERE user_id = u.id
+            AND blocked_user_id = $2
+        ) THEN true
+        ELSE false
+        END AS has_blocked
     FROM users u
     LEFT JOIN user_profiles up ON up.user_id = u.id
     JOIN chat_participants cp ON cp.user_id = u.id AND cp.chat_id = $1

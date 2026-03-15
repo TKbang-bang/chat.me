@@ -24,7 +24,7 @@ export const ioController = (socket, io, onlineUsers) => {
         }
       }
     } catch (error) {
-      console.error(error);
+      return socket.emit("server_error", error.message);
     }
   });
 };
