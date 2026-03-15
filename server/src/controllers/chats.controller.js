@@ -1,4 +1,5 @@
 import {
+  deleteGroupChatService,
   getChatInfoService,
   getChatMessagesService,
   getChatsService,
@@ -44,6 +45,18 @@ export const leaveGroupChatController = async (req, res, next) => {
     const { chatId } = req.params;
 
     await leaveGroupChatService(chatId, req.userId);
+
+    return res.status(201).end();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteGroupChatController = async (req, res, next) => {
+  try {
+    const { chatId } = req.params;
+
+    await deleteGroupChatService(chatId, req.userId);
 
     return res.status(201).end();
   } catch (error) {

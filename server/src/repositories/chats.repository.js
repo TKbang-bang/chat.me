@@ -182,6 +182,7 @@ export const getGroupChatInfo = async (chatId, userId) => {
         gd.chat_id AS id,
         gd.name,
         gd.picture,
+        gd.description,
         CASE
           WHEN cp.role = 'admin' THEN true
           ELSE false
@@ -279,4 +280,14 @@ export const leaveGroupChatAsAdmin = async (chatId, userId) => {
   } finally {
     client.release();
   }
+};
+
+export const deleteGroupChat = async (chatId) => {
+  await pool.query(
+    `
+      DELETE FROM chats
+      WHERE id = $1
+    `,
+    [chatId],
+  );
 };

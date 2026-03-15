@@ -1,4 +1,5 @@
 import {
+  deleteGroupChat,
   getChatById,
   getChats,
   getGroupChatInfo,
@@ -108,5 +109,18 @@ export const leaveGroupChatService = async (groupId, userId) => {
     await leaveGroupChatAsAdmin(groupId, userId);
   } else {
     await leaveGroupChatNormal(groupId, userId);
+  }
+};
+
+export const deleteGroupChatService = async (chatId, userId) => {
+  // verify if user in group chat
+  const groupChat = await getGroupChatInfo(chatId, userId);
+  if (!groupChat) throw new ServerError("User not in group chat", "user", 400);
+
+  if (groupChat.is_admin) {
+    // leave group chat as admin
+    await deleteGroupChat(chatId);
+  } else {
+    throw new ServerError("User not admin", "user", 400);
   }
 };

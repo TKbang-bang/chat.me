@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getChatInfo, leaveGroupChat } from "../../../services/chats.service";
+import {
+  deleteGroupChat,
+  getChatInfo,
+  leaveGroupChat,
+} from "../../../services/chats.service";
 import "./.css";
 import { CloseIcon } from "../../../svg/svgs";
 
@@ -16,6 +20,30 @@ function InfoContainer({ chatId }) {
     } catch (error) {
       return toast.error(error.response.data.error.message || error.message);
     }
+  };
+
+  const handleDeleteGroup = async (groupId) => {
+    try {
+      const res = await deleteGroupChat(groupId);
+      if (!res.success) return toast.error(res.message);
+
+      window.location.href = "/chats";
+    } catch (error) {
+      toast.error(error.response?.data?.error?.message || error.message);
+    }
+  };
+
+  const confirmDelete = (id) => {
+    toast("Are you sure you want to delete this group?", {
+      description: "This action cannot be undone.",
+      action: {
+        label: "Yes, delete",
+        onClick: () => handleDeleteGroup(id),
+      },
+      cancel: {
+        label: "Cancel",
+      },
+    });
   };
 
   useEffect(() => {
@@ -78,13 +106,21 @@ function InfoContainer({ chatId }) {
                   alt=""
                 />
                 <p className="alias">@{chatInfo.name}</p>
+                <p>{chatInfo.description}</p>
               </div>
 
               <div className="options">
                 <button onClick={() => handleLeaveGroup(chatInfo.id)}>
                   Leave
                 </button>
-                {chatInfo.is_admin && <button className="block">Delete</button>}
+                {chatInfo.is_admin && (
+                  <button
+                    className="block"
+                    onClick={() => confirmDelete(chatInfo.id)}
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
 
               <div className="users">
