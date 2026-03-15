@@ -4,6 +4,7 @@ import { getChats } from "../../../services/chats.service";
 import { NavLink } from "react-router-dom";
 import "./.css";
 import { IoContext } from "../../../contexts/io.context";
+import { PlusIcon } from "../../../svg/svgs";
 
 function ChatsList() {
   const [chats, setChats] = useState([]);
@@ -14,13 +15,17 @@ function ChatsList() {
 
     socket.on("server_message", (data) => {
       setChats((prev) =>
-        prev.map((chat) =>
-          chat.chat_id == data.chatId ? { ...chat, last_message: data } : chat,
-        ),
-      )?.sort(
-        (a, b) =>
-          new Date(b.last_message.created_at) -
-          new Date(a.last_message.created_at),
+        prev
+          .map((chat) =>
+            chat.chat_id == data.chatId
+              ? { ...chat, last_message: data }
+              : chat,
+          )
+          .sort(
+            (a, b) =>
+              new Date(b.last_message.created_at) -
+              new Date(a.last_message.created_at),
+          ),
       );
     });
   }, [socket]);
@@ -83,21 +88,22 @@ function ChatsList() {
                         {chat.last_message.content}
                       </span>
                     </p>
-                    <p className="date">
-                      {/* {`${chat.last_message.created_at.split(".")[0].split("T")[0]}:${
-                        chat.last_message.created_at.split(".")[0].split("T")[1]
-                      }`} */}
-                      {chat.last_message.date}
-                    </p>
+                    <p className="date">{chat.last_message.date}</p>
                   </div>
                 </NavLink>
               );
             })}
           </>
         ) : (
-          <h1>No chats</h1>
+          <div className="no-chats">
+            <h1>No chats</h1>
+          </div>
         )}
       </div>
+
+      <a href="/groups/create" className="create-group" title="Create Group">
+        <PlusIcon />
+      </a>
     </aside>
   );
 }

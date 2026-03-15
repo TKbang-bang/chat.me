@@ -70,7 +70,6 @@ header {
           background-color: var(--good-blue);
           position: absolute;
           bottom: 0;
-          /* left: 0; */
           animation: afterAnimation 0.3s ease-in-out;
         }
 
@@ -127,6 +126,13 @@ header {
     height: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    overflow-y: auto;
+    gap: 1rem;
+    padding: 1rem;
+
+    /* rev */
+    margin-top: 0;
+    padding-top: 1rem;
 
     & > * {
       justify-self: start;
@@ -192,6 +198,42 @@ header {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  position: relative;
+  z-index: 0;
+
+  .no-chats {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-block: 4rem;
+
+    h1 {
+      color: var(--gray-blue);
+    }
+  }
+
+  .create-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--gray-blue);
+    width: fit-content;
+    height: fit-content;
+    padding: 0.3rem;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+      fill: var(--dark-blue);
+    }
+  }
 
   .chats-container {
     width: 100%;
@@ -287,12 +329,10 @@ header {
   .chat-container {
     width: 50vw;
     height: 92svh;
-    border: 1px solid #000;
     position: relative;
     overflow: hidden;
 
     .chat-header {
-      border: 1px solid #000;
       width: 100%;
       display: flex;
       justify-content: flex-start;
@@ -411,7 +451,6 @@ header {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      /* border: 1px solid #000; */
       gap: 0.5rem;
 
       &.me {
@@ -463,7 +502,6 @@ header {
   .info-container {
     width: 25vw;
     height: 92svh;
-    border: 1px solid #000;
   }
 }
 
@@ -619,17 +657,6 @@ header {
     & > *:nth-child(2n) {
       justify-self: end;
     }
-
-    article {
-    }
-
-    img {
-    }
-
-    .extra {
-      button {
-      }
-    }
   }
 
   /* chat */
@@ -641,57 +668,23 @@ header {
       width: 100vw;
       height: 100svh;
 
-      .chat-header {
-        .back {
-          svg {
-          }
-        }
-
-        .info {
-          img {
-          }
-        }
-      }
-
       .message-form-container {
         .message-form {
           width: 35rem;
-
-          input {
-          }
-          button {
-            svg {
-            }
-          }
         }
       }
     }
 
     .messages-container {
-      border: 1px solid #000;
       width: 100vw;
       max-width: 100vw;
       height: 92svh;
       max-height: 92svh;
-
-      .message-container {
-        img {
-        }
-
-        .message {
-          h3 {
-          }
-
-          .date {
-          }
-        }
-      }
     }
 
     .info-container {
       width: 25vw;
       height: 92svh;
-      border: 1px solid #000;
       display: none;
     }
   }
@@ -717,11 +710,6 @@ header {
         width: 100%;
         height: 7rem;
       }
-
-      .extra {
-        button {
-        }
-      }
     }
   }
 
@@ -733,8 +721,6 @@ header {
         .back {
           width: 2.2rem;
           height: 2.2rem;
-          svg {
-          }
         }
 
         .info {
@@ -751,43 +737,21 @@ header {
         padding-inline: 1rem;
         .message-form {
           width: 100%;
-
-          input {
-          }
-          button {
-            svg {
-            }
-          }
         }
       }
     }
 
     .messages-container {
-      border: 1px solid #000;
       width: 100vw;
       max-width: 100vw;
       height: 92svh;
       max-height: 92svh;
       padding-block: 1rem 4rem;
-
-      .message-container {
-        img {
-        }
-
-        .message {
-          h3 {
-          }
-
-          .date {
-          }
-        }
-      }
     }
 
     .info-container {
       width: 25vw;
       height: 92svh;
-      border: 1px solid #000;
       display: none;
     }
   }

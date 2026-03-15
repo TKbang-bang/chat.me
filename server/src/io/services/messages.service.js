@@ -30,7 +30,8 @@ export const createMessageService = async (data, userId) => {
       content: messageCreated.content,
       sender_id: messageCreated.sender_id,
       me: messageCreated.sender_id === userId,
-      created_at: myDate(messageCreated.created_at),
+      created_at: messageCreated.created_at,
+      date: myDate(messageCreated.created_at),
       chatId: messageCreated.chat_id,
     };
   } else {

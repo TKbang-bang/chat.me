@@ -20,6 +20,11 @@ function Search() {
     navigate(`/search/${search}`);
   };
 
+  useEffect(() => {
+    window.location.pathname.includes("/search/") &&
+      setSearch(window.location.pathname.split("/")[2]);
+  }, []);
+
   return (
     <div className="search-container">
       <div className="seach-form-container">

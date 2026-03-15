@@ -14,6 +14,7 @@ function ChatViewer() {
           path="/chats"
           element={
             <div className="on-chat no-chat">
+              <h1>Chat.me</h1>
               <h1>Open a chat</h1>
             </div>
           }

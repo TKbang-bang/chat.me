@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { searchService } from "../../../services/search.service";
 import "./.css";
@@ -11,6 +11,7 @@ import {
 function Searched() {
   const [results, setResults] = useState([]);
   const { word } = useParams();
+  const navigate = useNavigate();
 
   const handleSendRequest = async (id, type) => {
     try {
@@ -49,6 +50,7 @@ function Searched() {
         if (!res.success) return toast.error(res.message);
 
         setResults(res.data);
+        console.log(res.data);
       } catch (error) {
         return toast.error(
           error.response?.data?.error?.message || error.message,
@@ -86,7 +88,11 @@ function Searched() {
                     <h3>{result.name}</h3>
 
                     {result.is_in_chat ? (
-                      <button>Go to chat</button>
+                      <button
+                        onClick={() => navigate(`/chats/${result.chat_id}`)}
+                      >
+                        Go to chat
+                      </button>
                     ) : (
                       <>
                         {result.has_sent_request ? (
