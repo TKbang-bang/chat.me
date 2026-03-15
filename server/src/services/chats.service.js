@@ -1,8 +1,11 @@
 import {
   getChatById,
   getChats,
+  getGroupChatInfo,
   getGroupChatMessages,
+  getUserChatInfo,
   getUserChatMessages,
+  getUsersInChat,
 } from "../repositories/chats.repository.js";
 import myDate from "../utils/dateFormat.js";
 
@@ -73,5 +76,22 @@ export const getChatMessagesService = async (chatId, userId) => {
     return { chat, group, messages: reformattedMessages };
   } else {
     throw new ServerError("Invalid chat type", "type", 400);
+  }
+};
+
+export const getChatInfoService = async (chatId, userId) => {
+  // verify if chat exists
+  const chat = await getChatById(chatId);
+  if (!chat) throw new ServerError("Chat not found", "chat", 404);
+
+  if (chat.type == "direct") {
+    const user = await getUserChatInfo(chatId);
+    return user;
+  } else if (chat.type == "group") {
+    const group = await getGroupChatInfo(chatId, userId);
+
+    // getting users in group chat
+    const users = await getUsersInChat(chatId);
+    return { ...group, users };
   }
 };

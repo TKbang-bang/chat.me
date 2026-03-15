@@ -5,6 +5,7 @@ import "./.css";
 import { toast } from "sonner";
 import { getChatMessages } from "../../../services/chats.service";
 import { IoContext } from "../../../contexts/io.context";
+import InfoContainer from "./InfoContainer";
 
 function OpenChat() {
   const { chatId } = useParams();
@@ -79,6 +80,11 @@ function OpenChat() {
           <div className="info">
             {chatMessages && chatMessages?.chat?.type == "group" ? (
               <img
+                onClick={() =>
+                  document
+                    .querySelector(".info-container")
+                    .classList.add("active")
+                }
                 src={
                   chatMessages?.group?.picture
                     ? `${import.meta.env.VITE_BACKEND_URL}/public/profiles/${chatMessages?.group?.picture}`
@@ -88,6 +94,11 @@ function OpenChat() {
               />
             ) : (
               <img
+                onClick={() =>
+                  document
+                    .querySelector(".info-container")
+                    .classList.add("active")
+                }
                 src={
                   chatMessages?.user?.picture
                     ? `${import.meta.env.VITE_BACKEND_URL}/public/profiles/${chatMessages?.user?.picture}`
@@ -165,9 +176,8 @@ function OpenChat() {
           </form>
         </div>
       </div>
-      <div className="info-container">
-        <h1>Chat info</h1>
-      </div>
+
+      <InfoContainer chatId={chatId} />
     </div>
   );
 }

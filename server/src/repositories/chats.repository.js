@@ -153,3 +153,65 @@ export const getGroupChatMessages = async (chatId) => {
 
   return { chat: chat.rows[0], group: group.rows[0], messages: messages.rows };
 };
+
+export const getUserChatInfo = async (chatId) => {
+  const user = await pool.query(
+    `
+    SELECT
+        u.id,
+        u.username,
+        u.first_name,
+        u.last_name,
+        up.picture,
+        'direct' AS type
+    FROM users u
+    LEFT JOIN user_profiles up ON up.user_id = u.id
+    JOIN chat_participants cp ON cp.user_id = u.id AND cp.chat_id = $1
+    JOIN chats c ON c.id = cp.chat_id AND c.type = 'direct'
+    `,
+    [chatId],
+  );
+
+  return user.rows[0];
+};
+
+export const getGroupChatInfo = async (chatId, userId) => {
+  const group = await pool.query(
+    `
+    SELECT
+        gd.chat_id AS id,
+        gd.name,
+        gd.picture,
+        CASE
+          WHEN cp.role = 'admin' THEN true
+          ELSE false
+        END AS is_admin,
+        'group' AS type
+    FROM group_details gd
+    JOIN chat_participants cp ON cp.chat_id = gd.chat_id AND cp.user_id = $2
+    WHERE gd.chat_id = $1
+    `,
+    [chatId, userId],
+  );
+
+  return group.rows[0];
+};
+
+export const getUsersInChat = async (chatId) => {
+  const users = await pool.query(
+    `
+    SELECT
+      u.id,
+      u.username,
+      up.picture,
+      cp.role
+    FROM chat_participants cp
+    JOIN users u ON u.id = cp.user_id
+    LEFT JOIN user_profiles up ON up.user_id = u.id
+    WHERE cp.chat_id = $1
+    `,
+    [chatId],
+  );
+
+  return users.rows;
+};

@@ -1,4 +1,5 @@
 import {
+  getChatInfoService,
   getChatMessagesService,
   getChatsService,
 } from "../services/chats.service.js";
@@ -20,6 +21,18 @@ export const getChatMessagesController = async (req, res, next) => {
     const data = await getChatMessagesService(chatId, req.userId);
 
     return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getChatInfoController = async (req, res, next) => {
+  try {
+    const { chatId } = req.params;
+
+    const info = await getChatInfoService(chatId, req.userId);
+
+    return res.status(200).json({ success: true, data: info });
   } catch (error) {
     return next(error);
   }
