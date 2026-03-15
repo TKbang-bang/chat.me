@@ -133,7 +133,7 @@ function OpenChat() {
                     />
 
                     <div className="message">
-                      <h3>{message?.sender_name}</h3>
+                      <h3>{message?.username}</h3>
                       <p className="content">{message?.content}</p>
                       <p className="date">{message?.date}</p>
                     </div>

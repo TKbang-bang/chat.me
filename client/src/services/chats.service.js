@@ -44,3 +44,18 @@ export const getChatInfo = async (chatId) => {
     };
   }
 };
+
+export const leaveGroupChat = async (groupId) => {
+  try {
+    const response = await api.delete(`/chats/${groupId}/leave`);
+    if (response.status !== 201)
+      return { success: false, message: response.data.error.message };
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response.data.error.message || error.message,
+    };
+  }
+};

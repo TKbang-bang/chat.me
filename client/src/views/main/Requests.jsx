@@ -24,7 +24,7 @@ function Requests() {
       setRequests(
         requests.filter(
           (request) =>
-            request.request_id !== requestId && request.type !== type,
+            !(request.request_id === requestId && request.type === type),
         ),
       );
     } catch (error) {

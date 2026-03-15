@@ -215,3 +215,68 @@ export const getUsersInChat = async (chatId) => {
 
   return users.rows;
 };
+
+export const leaveGroupChatNormal = async (chatId, userId) => {
+  await pool.query(
+    `
+    DELETE FROM chat_participants cp
+    USING chats c
+    WHERE c.id = cp.chat_id
+    AND c.type = 'group'
+    AND cp.chat_id = $1
+    AND cp.user_id = $2
+    `,
+    [chatId, userId],
+  );
+};
+
+export const leaveGroupChatAsAdmin = async (chatId, userId) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // deleing admin
+    await pool.query(
+      `
+      DELETE FROM chat_participants cp
+      USING chats c
+      WHERE c.id = cp.chat_id
+      AND c.type = 'group'
+      AND cp.chat_id = $1
+      AND cp.user_id = $2
+      `,
+      [chatId, userId],
+    );
+
+    // getting first user after admin
+    const fisrtUser = await pool.query(
+      `
+      SELECT cp.user_id
+      FROM chat_participants cp
+      WHERE cp.chat_id = $1
+      ORDER BY cp.joined_at ASC
+      LIMIT 1
+      `,
+      [chatId],
+    );
+
+    // setting first user as admin
+    fisrtUser.rows[0] &&
+      (await pool.query(
+        `
+      UPDATE chat_participants
+      SET role = 'admin'
+      WHERE chat_id = $1 AND user_id = $2
+      `,
+        [chatId, fisrtUser.rows[0].user_id],
+      ));
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+};

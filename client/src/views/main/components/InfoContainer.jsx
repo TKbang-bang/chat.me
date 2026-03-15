@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getChatInfo } from "../../../services/chats.service";
+import { getChatInfo, leaveGroupChat } from "../../../services/chats.service";
 import "./.css";
 import { CloseIcon } from "../../../svg/svgs";
 
 function InfoContainer({ chatId }) {
   const [chatInfo, setChatInfo] = useState({});
+
+  const handleLeaveGroup = async (groupId) => {
+    try {
+      const res = await leaveGroupChat(groupId);
+      if (!res.success) return toast.error(res.message);
+
+      return (window.location.href = "/chats");
+    } catch (error) {
+      return toast.error(error.response.data.error.message || error.message);
+    }
+  };
 
   useEffect(() => {
     const getInfo = async () => {
@@ -70,7 +81,9 @@ function InfoContainer({ chatId }) {
               </div>
 
               <div className="options">
-                <button>Leave</button>
+                <button onClick={() => handleLeaveGroup(chatInfo.id)}>
+                  Leave
+                </button>
                 {chatInfo.is_admin && <button className="block">Delete</button>}
               </div>
 

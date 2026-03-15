@@ -6,6 +6,8 @@ import {
   getUserChatInfo,
   getUserChatMessages,
   getUsersInChat,
+  leaveGroupChatAsAdmin,
+  leaveGroupChatNormal,
 } from "../repositories/chats.repository.js";
 import myDate from "../utils/dateFormat.js";
 
@@ -93,5 +95,18 @@ export const getChatInfoService = async (chatId, userId) => {
     // getting users in group chat
     const users = await getUsersInChat(chatId);
     return { ...group, users };
+  }
+};
+
+export const leaveGroupChatService = async (groupId, userId) => {
+  // verify if user in group chat
+  const groupChat = await getGroupChatInfo(groupId, userId);
+  if (!groupChat) throw new ServerError("User not in group chat", "user", 400);
+
+  if (groupChat.is_admin) {
+    // leave group chat as admin
+    await leaveGroupChatAsAdmin(groupId, userId);
+  } else {
+    await leaveGroupChatNormal(groupId, userId);
   }
 };
