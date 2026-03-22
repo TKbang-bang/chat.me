@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Cascadia Mono", monospace;
+        background: #fafafa;
+        color: #222;
+        line-height: 1.6;
+        padding: 0 1.5rem;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 0;
+      }
+
+      .focus {
+        font-weight: 600;
+        color: #000;
+      }
+
+      .big-title {
+        font-size: 2.8rem;
+        text-align: center;
+      }
+
+      .sub-title {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+
+      .sub-title::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: #ddd;
+      }
+
+      .small-title {
+        font-size: 1.1rem;
+        margin-top: 1rem;
+      }
+
+      .nav {
+        position: sticky;
+        top: 10px;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 0.8rem;
+        margin: 1rem auto;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid #e5e5e5;
+        border-radius: 12px;
+        width: fit-content;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 0.5rem;
+      }
+
+      .nav li {
+        list-style: none;
+      }
+
+      .nav a {
+        text-decoration: none;
+        font-size: 0.9rem;
+        color: #555;
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        transition: 0.2s ease;
+        white-space: nowrap;
+      }
+
+      .nav a:hover {
+        background: #000;
+        color: #fff;
+      }
+
+      .nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .sub-container {
+        margin-top: 1rem;
+        padding-left: 1rem;
+      }
+
+      ul {
+        padding-left: 1rem;
+      }
+
+      li {
+        margin-bottom: 0.4rem;
+      }
+
+      .code {
+        background: #f4f4f5;
+        color: #292727;
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: 1px solid #e5e5e5;
+        margin-top: 0.5rem;
+        overflow-x: auto;
+      }
+
+      pre {
+        background: #f4f4f5;
+        color: #111;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #e5e5e5;
+        overflow-x: auto;
+        margin-top: 2rem;
+      }
+
+      .principal {
+        text-align: center;
+        padding-top: 2rem;
+      }
+
+      .extra {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="principal container">
+      <h1 class="big-title focus">Chat.me</h1>
+      <div class="extra">
+        <p>
+          A full-stack real-time messaging platform that supports private chats,
+          group communication, and user interaction through a scalable
+          architecture and secure authentication system.
+        </p>
+        <p>
+          Built using a modern tech stack including React (client-side UI),
+          Node.js with Express (server-side logic), Socket.IO (real-time
+          communication), and PostgreSQL (relational database).
+        </p>
+      </div>
+    </div>
+
+    <ul class="nav container">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#tech-stack">Tech stack</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#security">Authentication & Security</a></li>
+      <li><a href="#env">env</a></li>
+      <li><a href="#instalation">Instalation</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+
+    <div class="features container" id="features">
+      <h2 class="sub-title focus">🚀 Features</h2>
+
+      <ul class="_features sub-container">
+        <li>✅ Users authentication</li>
+        <li>🔑 JWT authentication</li>
+        <li>📩 Email verification via Nodemailer</li>
+        <li>🔍 Search users and groups</li>
+        <li>🎉 Send requests to users</li>
+        <li>👥 Join/leave groups</li>
+        <li>🗑 Delete groups</li>
+        <li>🚫 Un/Block users</li>
+        <li>💬 Chat in real time</li>
+        <li>🚪 Logout</li>
+      </ul>
+    </div>
+
+    <div class="tech-stack container" id="tech-stack">
+      <h2 class="sub-title focus">🧩 Tech Satck</h2>
+      <div class="sub-container">
+        <h3 class="small-title focus">Frontend</h3>
+
+        <ul class="sub-container">
+          <li>React</li>
+          <li>Axios</li>
+          <li>React Router Dom</li>
+          <li>Socket.io-client</li>
+          <li>Sonner (notifications)</li>
+        </ul>
+      </div>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Backend</h3>
+
+        <ul class="sub-container">
+          <li>Node JS</li>
+          <li>Express</li>
+          <li>Cors</li>
+          <li>Dotenv</li>
+          <li>JSONWebToken (authentication)</li>
+          <li>BCrypt (password encryption)</li>
+          <li>NodeMailer (email verification)</li>
+          <li>Cookie-parser</li>
+          <li>Nanoid (nanoid generator)</li>
+          <li>Date-fns</li>
+          <li>Socket.io</li>
+          <li>PostgreSQL (database)</li>
+          <li>pg (package for PostgreSQL)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="architecture container" id="architecture">
+      <h2 class="sub-title focus">🏗️ Architecture</h2>
+
+      <div class="sub-container">
+        <p>
+          Project structure for <strong>ChatMe</strong>, a fullstack real-time
+          chat application built with React (client) and Node.js + Express
+          (server).
+        </p>
+        <p>
+          The backend follows an MVC + Service + Repository pattern for better
+          separation of concerns and scalability.
+        </p>
+
+        <pre>
+📁 chatme
+├── 📁 client
+│   ├── 📁 node_modules
+│   ├── 📁 public
+│   ├── 📁 src
+│   ├── .env
+│   ├── .gitignore
+│   ├── .eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   └── package.json
+├── 📁 server
+│   ├── 📁 node_modules
+│   ├── 📁 src
+│   │   ├── 📁 controllers
+│   │   ├── 📁 db
+│   │   ├── 📁 error
+│   │   ├── 📁 io
+│   │   ├── 📁 middlewares
+│   │   ├── 📁 repositories
+│   │   ├── 📁 routes
+│   │   ├── 📁 services
+│   │   ├── 📁 utils
+│   │   ├── app.js
+│   │   ├── router.js
+│   │   └── server.js
+│   ├── .env
+│   ├── .gitignore
+│   ├── package-lock.json
+│   └── package.json
+└── README.md
+  </pre
+        >
+      </div>
+    </div>
+
+    <div class="security container" id="security">
+      <h2 class="sub-title focus">🔑 Authentication & Security</h2>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Account Registration</h3>
+        <ul class="sub-container">
+          <li>
+            When a user registers, their data is stored in a
+            <strong>pending state</strong>.
+          </li>
+          <li>
+            A verification email is sent containing a one-time code that expires
+            in 5 minutes.
+          </li>
+          <li>
+            The server validates the code and activates the account if it
+            matches.
+          </li>
+          <li>
+            Upon successful verification, the server issues an
+            <strong>access token</strong> and a
+            <strong>refresh token</strong> via HTTP-only cookies.
+          </li>
+        </ul>
+
+        <h3 class="small-title focus">Login</h3>
+        <ul class="sub-container">
+          <li>
+            The server validates user credentials and issues new authentication
+            tokens (access + refresh) stored in cookies.
+          </li>
+        </ul>
+
+        <h3 class="small-title focus">Protected Routes</h3>
+        <ul class="sub-container">
+          <li>
+            Requests to protected endpoints are intercepted by an authentication
+            middleware.
+          </li>
+          <li>
+            The middleware validates the access token to authorize the request.
+          </li>
+          <li>
+            If the access token is expired but the refresh token is valid, new
+            tokens are issued transparently.
+          </li>
+          <li>
+            If both tokens are invalid, the request is rejected with a
+            <strong>401 Unauthorized</strong> response.
+          </li>
+          <li>
+            The client handles 401 responses by clearing session state and
+            redirecting the user to the sign page.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container" id="env">
+      <h2 class="sub-title focus">🌳 Environment Variables</h2>
+
+      <div class="sub-container">
+        <h2 class="small-title focus">Client</h2>
+        <div class="code">
+          <p>VITE_SERVER_URL</p>
+        </div>
+      </div>
+
+      <div class="sub-container">
+        <h2 class="small-title focus">Server</h2>
+
+        <h3 class="small-title focus">server config</h3>
+        <div class="code">
+          <p>CLIENT_URL</p>
+          <p>PORT</p>
+          <p>NODE_ENV</p>
+        </div>
+
+        <h3 class="small-title focus">Database</h3>
+        <div class="code">
+          <p>DB_USER</p>
+          <p>DB_HOST</p>
+          <p>DB_NAME</p>
+          <p>DB_PASSWORD</p>
+          <p>DB_PORT</p>
+        </div>
+
+        <h3 class="small-title focus">Nodemailer email credentials</h3>
+        <div class="code">
+          <p>EMAIL</p>
+          <p>PASSWORD</p>
+        </div>
+
+        <h3 class="small-title focus">JSONWebToken</h3>
+        <div class="code">
+          <p>ACCESS_TOKEN_SECRET</p>
+          <p>REFRESH_TOKEN_SECRET</p>
+        </div>
+      </div>
+
+      <h2 class="sub-title focus">Environment Variables Explained</h2>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Client</h3>
+        <ul class="sub-container">
+          <li><span>VITE_SERVER_URL</span>: The URL of the server API</li>
+        </ul>
+      </div>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Server</h3>
+
+        <h3 class="small-title focus">server config</h3>
+        <ul class="sub-container">
+          <li><span>CLIENT_URL</span>: The URL of the client app</li>
+          <li>
+            <span>PORT</span>: The port number on which the server will listen
+          </li>
+          <li>
+            <span>NODE_ENV</span>: The environment in which the server is
+            running
+          </li>
+        </ul>
+      </div>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Database</h3>
+        <ul class="sub-container">
+          <li><span>DB_USER</span>: The database username</li>
+          <li><span>DB_HOST</span>: The database host</li>
+          <li><span>DB_NAME</span>: The name of the database</li>
+          <li><span>DB_PASSWORD</span>: The database password</li>
+          <li><span>DB_PORT</span>: The database port</li>
+        </ul>
+      </div>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Nodemailer email credentials</h3>
+        <ul class="sub-container">
+          <li><span>EMAIL</span>: The email address to send emails from</li>
+          <li><span>PASSWORD</span>: The password for the email account</li>
+        </ul>
+      </div>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">JSONWebToken</h3>
+        <ul class="sub-container">
+          <li>
+            <span>ACCESS_TOKEN_SECRET</span>: The secret key used to sign the
+            access token
+          </li>
+          <li>
+            <span>REFRESH_TOKEN_SECRET</span>: The secret key used to sign the
+            refresh token
+          </li>
+        </ul>
+      </div>
+
+      <p>
+        <span class="focus">⚠️ Important</span>: to be able to use
+        <span class="focus">NodeMailer</span> with your Gmail account, you'll
+        have to enable <span class="focus">2-Step Verification</span> and
+        generate an <span class="focus">App Password</span>.
+      </p>
+    </div>
+
+    <div class="container" id="instalation">
+      <h2 class="sub-title focus">Instalation & Setup</h2>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Clone the repository</h3>
+        <div class="code">
+          <p>git clone https://github.com/TKbang-bang/chat.me.git</p>
+        </div>
+        <div class="code">
+          <p>cd chat.me</p>
+        </div>
+      </div>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Set up client</h3>
+        <div class="code">
+          <p>cd client</p>
+        </div>
+        <div class="code">
+          <p>npm install</p>
+        </div>
+        <div class="code">
+          <p>npm run dev</p>
+        </div>
+      </div>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Set up server</h3>
+        <div class="code">
+          <p>cd server</p>
+        </div>
+        <div class="code">
+          <p>npm install</p>
+        </div>
+        <div class="code">
+          <p>npm run dev</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="about">
+      <h2 class="sub-title focus">About</h2>
+
+      <div class="sub-container">
+        <h3 class="small-title focus">Author</h3>
+        <ul class="sub-container">
+          <li>
+            <a
+              href="https://github.com/TKbang-bang/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="focus"
+              >TKBang-bang</a
+            >: The author of the project
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
