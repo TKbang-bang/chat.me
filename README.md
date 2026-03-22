@@ -6,6 +6,13 @@ Built using a modern tech stack including **React (client-side UI)**, **Node.js 
 
 ---
 
+## 📸 Preview
+
+![Preview](./client/public/image4.png)
+![Preview](./client/public/image3.png)
+![Preview](./client/public/image2.png)
+![Preview](./client/public/image1.png)
+
 ## 🚀 Features
 
 - ✅ Users authentication
