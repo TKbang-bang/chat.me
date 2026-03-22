@@ -8,10 +8,15 @@ Built using a modern tech stack including **React (client-side UI)**, **Node.js 
 
 ## 📸 Preview
 
-![Preview](./client/public/image4.png)
-![Preview](./client/public/image3.png)
-![Preview](./client/public/image2.png)
-![Preview](./client/public/image1.png)
+<p align="center">
+  <img src="./client/public/image4.png" width="45%" />
+  <img src="./client/public/image3.png" width="45%" />
+</p>
+
+<p align="center">
+  <img src="./client/public/image2.png" width="45%" />
+  <img src="./client/public/image1.png" width="45%" />
+</p>
 
 ## 🚀 Features
 
