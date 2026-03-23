@@ -8,6 +8,7 @@ import io from "socket.io-client";
 import { IoContextProvider } from "../../contexts/io.context";
 import ChatViewer from "./ChatViewer";
 import CreateGroup from "./CreateGroup";
+import Users from "./Users";
 
 const socket = io(import.meta.env.VITE_SERVER_URL);
 
@@ -20,6 +21,7 @@ function Home() {
         <Routes>
           <Route path="*" element={<ChatViewer />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/users" element={<Users />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/search/*" element={<Search />} />
           <Route path="/groups/create" element={<CreateGroup />} />
