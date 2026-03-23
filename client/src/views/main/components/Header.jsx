@@ -82,12 +82,12 @@ function Header() {
                   <p>Home</p>
                 </NavLink>
               </li>
-              {/* <li>
-                <NavLink to={"/account"}>
+              <li>
+                <NavLink to={"/users"}>
                   <UserIcon />
-                  <p>Account</p>
+                  <p>Users</p>
                 </NavLink>
-              </li> */}
+              </li>
               <li>
                 <NavLink to={"/requests"}>
                   <UserRequestIcon />
